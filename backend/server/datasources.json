@@ -1,0 +1,23 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "memotrackingdb": {
+    "host": "127.0.0.1",
+    "port": 27017,
+    "url": "",
+    "database": "memotrackingdb",
+    "password": "admin",
+    "name": "memotrackingdb",
+    "user": "admin",
+    "connector": "mongodb"
+  },
+  "memo-files": {
+    "name": "memo-files",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./server/local-storage",
+    "nameConflict": "makeUnique"
+  }
+}

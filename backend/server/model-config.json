@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "memotrackingdb"
+  },
+  "AccessToken": {
+    "dataSource": "memotrackingdb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "memotrackingdb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "memotrackingdb",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "memotrackingdb",
+    "public": false
+  },
+  "MemoUser": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "AddMemo": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "container": {
+    "dataSource": "memo-files",
+    "public": true
+  },
+  "corrType": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "userRole": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "corrAssignment": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  }
+}

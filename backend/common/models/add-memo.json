@@ -1,0 +1,37 @@
+{
+  "name": "AddMemo",
+  "plural": "AddMemos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "toWhom": {
+      "type": "string",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "fromWhere": {
+      "type": "string",
+      "required": true
+    },
+    "dateReceived": {
+      "type": "date",
+      "required": true
+    },
+    "attachment": {
+      "type": [
+        "object"
+      ],
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
