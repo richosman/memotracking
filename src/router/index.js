@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VueMoment from 'vue-moment'
 import store from '../store'
 import Home from '@/components/Home'
 import Login from '@/components/login/Login'
@@ -15,7 +14,7 @@ import Assign from '@/components/correspondence/Assign'
 
 Vue.use(Router)
 
-Vue.use(VueMoment)
+
 
 export default new Router({
   routes: [

@@ -148,6 +148,7 @@
     },
     created() {
       this.$store.dispatch('getUser')
+      this.$store.dispatch('getAllUsers')
       //this.$store.getters.user
     }
   }

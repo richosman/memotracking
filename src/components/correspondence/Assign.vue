@@ -92,16 +92,18 @@
           //comments: this.comments,
           fromUserId: localStorage.getItem('userId'),
           dateReceived: new Date(),
-          correspondenceId: this.$store.getters.getAssignCorrId
-          //dateReceived: this.dateReceived,
+          correspondenceId: this.$store.getters.getAssignCorrId,
+          dateAssigned: null,
+          duration: null
           //subject: this.subject,
          //
           //fromWhere: this.fromWhere
           //attachment: ''
         }
+        console.log('something', formData.dateReceived)
         this.$store.dispatch('assignCorrTo', formData)
         $("#showAssignTo").modal("hide")
-        console.log('something', formData)
+
       }
     },
 

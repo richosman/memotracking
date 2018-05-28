@@ -220,6 +220,15 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
+    getAllUsers({commit, state}) {
+      axios.get('/MemoUsers/?access_token='+ state.tokenId)
+        .then(res => {
+          console.log('all users are', res)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     addCorrespondence({commit, state}, correspondenceData){
       axios.post('/AddMemos?access_token=' + state.tokenId, correspondenceData)
         .then(res => {
@@ -354,30 +363,49 @@ export default new Vuex.Store({
 
       const corrId = formData.correspondenceId
       console.log('corr', corrId)
-      //this.$http.get('myusers/'+uid+'/tasks?access_token='+utoken+'&filter[where][task_status]=due&filter[order]=task_updated_date=DESC')
-      //http://localhost:3000/api/corrAssignments?filter=%7B%22correspondenceId%22%3A%225aff657dd678a8291eb5def9%22%7D&access_token=fG3dnpArLX6C4BOBBqiNIwLKBG2t0GMw0hC223VoS27tKuEnLR4817wxwOCC2DH9
 
-       // axios.get('/corrAssignments?filter=%7B%22correspondenceId%22%3A%22' + corrId + '%22%7D=&access_token=' + state.tokenId )
-      axios.get('/corrAssignments?filter[where][correspondenceId]=' + corrId + '&access_token=' + state.tokenId )
-       //axios.get('/corrAssignments?filter={"where":{"correspondenceId":' + corrId +  '}}&access_token=' + state.tokenId )
-        //axios.get('/corrAssignments?filter=%7B%22correspondenceId%22%3A%225aff657dd678a8291eb5def9%22%7D&access_token=fG3dnpArLX6C4BOBBqiNIwLKBG2t0GMw0hC223VoS27tKuEnLR4817wxwOCC2DH')
+      axios.get('/corrAssignments?access_token=' + state.tokenId )
         .then(res => {
 
-          //let fetchedCorrespondence = res.data
           console.log('update assigned correspondence', res.data)
-          //commit('storeFetchedCorrespondence',  fetchedCorrespondence)
+          var getAllAssignedCorr = res.data
+          var filteredCorr = getAllAssignedCorr.filter(function(AssignedCorr){
+            return AssignedCorr.correspondenceId === corrId;
+
+          }).filter(function(filteredDate){
+            return filteredDate.dateAssigned === null
+          })
+          var dateAssigned = new Date()
+          var dateDiff = moment(dateAssigned).diff(moment(filteredCorr[0].dateReceived), 'days')
+
+          var updateAssignedCorr = {
+            dateAssigned: dateAssigned,
+            duration: dateDiff
+
+          }
+          console.log('duration', dateDiff)
+          axios.patch('/corrAssignments/' + filteredCorr[0].id + '?access_token=' + state.tokenId, updateAssignedCorr)
+            .then(res => {
+              axios.post('/corrAssignments?access_token=' + state.tokenId, formData)
+                .then(res => {
+                  console.log(res)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+              console.log(res)
+            })
+
+            .catch(error =>{
+              console.log(error)
+            })
+          console.log('filtered Corr', filteredCorr)
 
         })
         .catch(error =>{
           console.log(error)
         })
-      axios.post('/corrAssignments?access_token=' + state.tokenId, formData)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+
     }
   },
   getters: {

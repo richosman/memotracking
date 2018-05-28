@@ -739,9 +739,7 @@
       appSidebar:Sidebar,
       appFooter:Footer
     },
-    created () {
-      this.$store.dispatch('autoLogin')
-    }
+
   }
 </script>
 

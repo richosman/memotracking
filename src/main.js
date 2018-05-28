@@ -5,11 +5,14 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import store from './store'
+import VueMoment from 'vue-moment'
 
 
 axios.defaults.baseURL = 'http://localhost:3000/api/'
 
 Vue.config.productionTip = false
+
+Vue.use(VueMoment)
 
 
 /* eslint-disable no-new */
