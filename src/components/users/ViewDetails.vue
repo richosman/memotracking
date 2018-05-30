@@ -1,6 +1,6 @@
 <template>
 
-  <div id="showCorrDetails" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div id="showUserDetails" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -13,72 +13,52 @@
           <table class="tableDetails" id="comp-detail-bottom">
             <tr class="detail-title">
               <td colspan="4">
-                Details Of Correspondence
+                User Details
               </td>
             </tr>
             <tr>
               <td class="comp-detail-body-ld">
-                To Whom Received
+                Full Name
               </td>
               <td class="comp-detail-body-rd">
-                {{ displayDetail.toWhom }}
+                {{ displayDetail.fullname }}
               </td>
 
             </tr>
             <tr>
               <td class="comp-detail-body-ld">
-                Type Of Correspondence
+                Username
+              </td>
+              <td class="comp-detail-body-rd">
+                {{ displayDetail.username }}
+              </td>
+
+            </tr>
+            <tr>
+              <td class="comp-detail-body-ld">
+                Division
+              </td>
+              <td class="comp-detail-body-rd">
+                {{ displayDetail.division }}
+              </td>
+
+            </tr>
+
+            <tr>
+              <td class="comp-detail-body-ld">
+                User Role
               </td>
               <td class="comp-detail-body-rd" >
-                <div v-for="corrType in corrTypes" >
-                  <span v-if="displayDetail.typeOfCorrespondence == corrType.id">
+                <div v-for="roleType in roleTypes" >
+                  <span v-if="displayDetail.userRole == roleType.id">
 
-                {{ corrType.typeOfCorrespondence }}
+                {{ roleType.userRole }}
                   </span>
                 </div>
               </td>
 
             </tr>
-            <tr>
-              <td class="comp-detail-body-ld">
-                Subject Matter
-              </td>
-              <td class="comp-detail-body-rd">
-                {{ displayDetail.subject }}
-              </td>
 
-            </tr>
-            <tr>
-              <td class="comp-detail-body-ld">
-                Division/Company/Clients
-              </td>
-              <td class="comp-detail-body-rd">
-                {{ displayDetail.fromWhere }}
-              </td>
-
-            </tr>
-            <tr>
-              <td class="comp-detail-body-ld">
-                Date Received
-              </td>
-              <td class="comp-detail-body-rd">
-                {{ displayDetail.dateReceived }}
-              </td>
-
-            </tr>
-            <tr>
-              <td class="comp-detail-body-ld">
-                Download Correspondence
-              </td>
-              <td class="comp-detail-body-rd">
-                <ul>
-                  <li v-for="file in displayDetail.attachment">
-                    <a :href="'http://localhost:3000/api/containers/memo-file-uploads/download/'+file.name">{{ file.originalFilename }}</a>
-                  </li>
-                </ul>
-              </td>
-
-            </tr>
 
           </table>
         </div>
@@ -96,22 +76,21 @@
   import axios from 'axios'
 
   export default {
-
     computed: {
 
       displayDetail (){
 //        console.log('corr types', this.$store.getters.getAllCorrTypes)
-        return this.$store.getters.fetchedCorrDetails
+        return this.$store.getters.fetchedUserDetails
       },
-      corrTypes(){
-        console.log('corr types', this.$store.getters.getAllCorrTypes)
-        return this.$store.getters.getAllCorrTypes
+      roleTypes(){
+        console.log('corr types', this.$store.getters.getAllUserRoles)
+        return this.$store.getters.getAllUserRoles
       }
 
     },
     created() {
-      this.$store.dispatch('getAllCorrTypes')
-      console.log('detail data', this.displayDetail)
+      this.$store.dispatch('getAllUserRoles')
+
     }
 
   }

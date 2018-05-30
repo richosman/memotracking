@@ -7,6 +7,7 @@ import AddCorrespondence from '@/components/correspondence/Add'
 import ViewCorrespondence from '@/components/correspondence/View'
 import AddUser from '@/components/users/Add'
 import ViewUsers from '@/components/users/View'
+import EditUser from '@/components/users/Edit'
 import MyCorrespondence from '@/components/correspondence/My-Correspondence'
 import EditCorrespondence from '@/components/correspondence/Edit'
 import AdminHome from '@/components/admin/Admin-Home'
@@ -86,6 +87,19 @@ export default new Router({
           next('/')
         }
       }
+
+    },
+    {
+      path: '/edit-user',
+      name: 'EditUser',
+      component: EditUser
+      // beforeEnter (to, from, next) {
+      //   if (localStorage.getItem('token')) {
+      //     next()
+      //   } else {
+      //     next('/')
+      //   }
+      // }
 
     },
     {

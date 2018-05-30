@@ -12,15 +12,18 @@ export default new Vuex.Store({
     tokenId: null,
     userId: null,
     user: null,
+    users: [],
     //userlist: []
     memoList: [],
-    tfile_names: [],
-    uploadedFiles: {},
+    tfile_names: {},
+    uploadedFiles: [],
     fetchedCorrespondence: null,
     fetchedCorrDetails: null,
     corrTypes: null,
     userRole: null,
-    assignCorrId: null
+    assignCorrId: null,
+    userInfoDetails: null
+
     //showDetailModal: false
   },
   mutations: {
@@ -30,6 +33,9 @@ export default new Vuex.Store({
     },
     storeUser(state, user){
       state.user = user
+    },
+    storeAllUsers(state, users){
+      state.users = users
     },
     storeMemos(state, memoList){
       state.memoList = memoList
@@ -56,6 +62,9 @@ export default new Vuex.Store({
     },
     storeAssignCorrId(state, assignCorrId){
       state.assignCorrId = assignCorrId
+    },
+    storeUserInfo(state, userInfo){
+      state.userInfoDetails = userInfo
     }
 
     // changeShowDetailModal(state){
@@ -162,6 +171,7 @@ export default new Vuex.Store({
       axios.post('/containers/memo-file-uploads/upload?access_token='+utoken, files)
         .then(response=>{
           //console.log(response);
+          var tempFiles = []
           for (var i = 0; i < response.data.result.files.filesToUpload.length ; i++){
             state.tfile_names = {
               name: response.data.result.files.filesToUpload[i].name,
@@ -169,11 +179,11 @@ export default new Vuex.Store({
               size: response.data.result.files.filesToUpload[i].size
             }
 
-            state.uploadedFiles.push(state.tfile_names)
+            tempFiles.push(state.tfile_names)
 
-            //console.log('uploadedFiles', state.uploadedFiles )
+            console.log('tfilenames', state.tfile_names )
           }
-          commit('storeMemoAttachment', state.uploadedFiles)
+          commit('storeMemoAttachment', tempFiles)
           // state.tfile_names = state.uploadedFiles;
 
           //alertify.success('Upload successful')
@@ -220,10 +230,45 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
+    getUserInfo ({commit, state}, userId) {
+
+      axios.get('/MemoUsers/'+userId+'?access_token=' + state.tokenId)
+
+        .then(res => {
+          const data = res.data
+          console.log('data', data)
+
+          commit('storeUserInfo', data)
+          setTimeout(
+            function(){
+              $("#showUserDetails").modal('show')
+            }, 1000);
+
+        })
+        .catch(error => console.log(error))
+    },
+    getUserEditInfo ({commit, state}, userId) {
+
+      axios.get('/MemoUsers/'+userId+'?access_token=' + state.tokenId)
+
+        .then(res => {
+          const data = res.data
+          console.log('data', data)
+
+          commit('storeUserInfo', data)
+          setTimeout(
+            function(){
+              $("#showUserEdit").modal('show')
+            }, 500);
+
+        })
+        .catch(error => console.log(error))
+    },
     getAllUsers({commit, state}) {
       axios.get('/MemoUsers/?access_token='+ state.tokenId)
         .then(res => {
-          console.log('all users are', res)
+          commit('storeAllUsers', res.data)
+          //console.log('all users are', res)
         })
         .catch(error => {
           console.log(error)
@@ -306,6 +351,17 @@ export default new Vuex.Store({
           console.log(error)
         })
 
+    },
+    editUserDetailsInfo({commit, state}, editFormData){
+      const userId = editFormData.id
+      axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
+        .then(res => {
+
+          router.push('/view-users')
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     addCorrType({commit, state}, formData) {
       axios.post('/corrTypes?access_token=' + state.tokenId, formData)
@@ -416,7 +472,9 @@ export default new Vuex.Store({
       return state.memoList
     },
     memoAttachment(state){
+      console.log('uploaded files', state.uploadedFiles)
       return state.uploadedFiles
+
     },
     fetchedCorr(state){
       return state.fetchedCorrespondence
@@ -432,6 +490,12 @@ export default new Vuex.Store({
     },
     getAssignCorrId(state){
       return state.assignCorrId
+    },
+    getAllUsers(state) {
+      return state.users
+    },
+    fetchedUserDetails(state){
+      return state.userInfoDetails
     }
 
 

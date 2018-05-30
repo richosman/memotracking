@@ -24,9 +24,7 @@
       "required": true
     },
     "attachment": {
-      "type": [
-        "object"
-      ],
+      "type": "object",
       "required": false
     }
   },

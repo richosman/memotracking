@@ -56,22 +56,40 @@
                                   <th>Division</th>
                                   <th>Email</th>
                                   <th>Role</th>
-                                  <th>Details</th>
                                   <th>Edit</th>
+                                  <th>Details</th>
                                   <th>Status</th>
 
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr >
+                                <tr v-for="user in users">
                                   <td>{{ user.fullname }}</td>
                                   <td>{{ user.username }}</td>
                                   <td>{{ user.division }}</td>
                                   <td>{{ user.email }}</td>
-                                  <td>{{ user.userRole }}</td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
+                                  <td>
+                                    <div v-for="getUserType in getUserTypes" >
+                                <span v-if="user.userRole == getUserType.id">
+
+                                    {{ getUserType.userRole }}
+                                </span>
+                                    </div>
+
+                                  </td>
+                                  <td>
+                                    <router-link
+                                      tag="button"
+                                      :to="{ name: 'EditUser', params: { userId: user.id } }"
+                                      class="btn btn-primary">Edit</router-link>
+                                    </td>
+                                  <td>
+                                    <button
+
+                                    @click="getUserDetails(user.id)"
+                                    class="btn btn-primary">Details</button></td>
+
+                                  <td> </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
@@ -124,6 +142,9 @@
 
 
     </div>
+
+    <app-view-details></app-view-details>
+
   </div>
 </template>
 
@@ -132,24 +153,40 @@
   import Sidebar from '../sidebar/Sidebar.vue'
   import Footer from '../footer/Footer.vue'
   import axios from 'axios'
+  import  ViewDetails from './ViewDetails.vue'
+
 
   export default {
     components:{
       appHeaderNav:HeaderNav,
       appSidebar:Sidebar,
-      appFooter:Footer
+      appFooter:Footer,
+      appViewDetails:ViewDetails,
+
     },
     computed: {
-      user() {
+      users() {
 
-        return this.$store.getters.user
-
+        return this.$store.getters.getAllUsers
+      },
+      getUserTypes(){
+        //console.log('corr types', this.$store.getters.getAllCorrTypes)
+        return this.$store.getters.getAllUserRoles
       }
     },
     created() {
       this.$store.dispatch('getUser')
       this.$store.dispatch('getAllUsers')
+      this.$store.dispatch('getAllUserRoles')
       //this.$store.getters.user
+    },
+    methods: {
+      getUserDetails(userId) {
+        this.$store.dispatch('getUserInfo', userId)
+      },
+//      getUserEdit(userId){
+//        this.$store.dispatch('getUserEditInfo', userId)
+//      }
     }
   }
 </script>

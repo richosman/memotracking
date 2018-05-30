@@ -154,8 +154,8 @@
     },
     methods: {
       AddCorrespondence(){
-        var attach = this.getMemoAttachment
-//        var attach = this.$store.getters.memoAttachment
+        //var attach = this.getMemoAttachment
+        var attach = this.$store.getters.memoAttachment
         //console.log(formData)
 
         const formData = {
@@ -163,8 +163,8 @@
           typeOfCorrespondence: this.typeOfCorrespondence,
           dateReceived: this.dateReceived,
           subject: this.subject,
-          fromWhere: this.fromWhere
-         //attachment: ''
+          fromWhere: this.fromWhere,
+          'attachment': attach
         }
         console.log(' Date data', formData.dateReceived)
         this.$store.dispatch('addCorrespondence', formData)

@@ -115,10 +115,11 @@
 
 <script>
   import axios from 'axios'
+  import router from '../../router/index'
   import HeaderNav from '../header/HeaderNav.vue'
   import Sidebar from '../sidebar/Sidebar.vue'
   import Footer from '../footer/Footer.vue'
-  import router from '../../router/index'
+
   export default {
     data(){
       return {
@@ -168,7 +169,7 @@
           fromWhere: document.getElementById('fromWhere').value,
           //id: this.correspondenceId
         }
-        console.log('send formDate', {formData, id: this.correspondenceId})
+        //console.log('send formDate', {formData, id: this.correspondenceId})
         this.$store.dispatch('editCorrespondence', {formData, id: this.correspondenceId})
 
       },

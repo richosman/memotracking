@@ -31,6 +31,12 @@
     },
     {
       "principalType": "ROLE",
+      "accessType": "WRITE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "deleteById"
@@ -88,13 +94,8 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "updateAll"
-    },
-    {
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW",
-      "property": "get"
     }
+
   ],
   "methods": {}
 }

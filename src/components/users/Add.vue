@@ -37,29 +37,34 @@
                 <div>
                   <form>
                     <div class="form-group has-feedback">
+                      <label>Full Name</label>
                       <input type="text" v-model="fullname" class="form-control" placeholder="Full name">
                       <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
+                      <label>Username</label>
                       <input type="text" v-model="username" class="form-control" placeholder="Username">
                       <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
+                      <label>Email</label>
                       <input type="email" v-model="email" class="form-control" placeholder="Email">
                       <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group">
                       <label>User Role</label>
                       <select class="form-control" v-model="userRole" >
-                        <option v-for="fetchedUserRole in fetchedUserRoles">{{ fetchedUserRole.userRole }}</option>
+                        <option v-for="fetchedUserRole in fetchedUserRoles" :value="fetchedUserRole.id">{{ fetchedUserRole.userRole }}</option>
 
                       </select>
                     </div>
                     <div class="form-group has-feedback">
+                      <label>Password</label>
                       <input type="password" v-model="password" class="form-control" placeholder="Password">
                       <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
+                      <label>Confirm Password</label>
                       <input type="password" v-model="confirmPass" class="form-control" placeholder="Retype password">
                       <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                     </div>
