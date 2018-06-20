@@ -64,6 +64,6 @@
     "public": true
   },
   "Email": {
-    "dataSource": "sendMailDS"
+    "dataSource": "Email"
   }
 }

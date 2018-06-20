@@ -20,7 +20,7 @@
     "root": "./server/local-storage",
     "nameConflict": "makeUnique"
   },
-  "sendMailDS": {
+  "Email": {
     "name": "sendMailDS",
     "connector": "mail",
     "transports": [{
@@ -29,8 +29,8 @@
       "secure": true,
       "port": 465,
       "auth": {
-        "user": "richosmanthus@gmail.com",
-        "pass": "23rdmarch1986"
+        "user": "jmosesessel21@gmail.com",
+        "pass": "0jemo20.@2016"
       }
     }]
   }
