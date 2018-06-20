@@ -19,5 +19,19 @@
     "provider": "filesystem",
     "root": "./server/local-storage",
     "nameConflict": "makeUnique"
+  },
+  "sendMailDS": {
+    "name": "sendMailDS",
+    "connector": "mail",
+    "transports": [{
+      "type": "SMTP",
+      "host": "smtp.gmail.com",
+      "secure": true,
+      "port": 465,
+      "auth": {
+        "user": "richosmanthus@gmail.com",
+        "pass": "23rdmarch1986"
+      }
+    }]
   }
 }

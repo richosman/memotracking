@@ -6,6 +6,9 @@ import router from './router'
 import axios from 'axios'
 import store from './store'
 import VueMoment from 'vue-moment'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en'
 
 
 axios.defaults.baseURL = 'http://localhost:3000/api/'
@@ -13,6 +16,8 @@ axios.defaults.baseURL = 'http://localhost:3000/api/'
 Vue.config.productionTip = false
 
 Vue.use(VueMoment)
+
+Vue.use(ElementUI, { locale });
 
 
 /* eslint-disable no-new */

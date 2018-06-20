@@ -58,5 +58,12 @@
   "corrAssignment": {
     "dataSource": "memotrackingdb",
     "public": true
+  },
+  "assignCorr": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "Email": {
+    "dataSource": "sendMailDS"
   }
 }

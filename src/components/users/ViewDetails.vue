@@ -46,6 +46,15 @@
 
             <tr>
               <td class="comp-detail-body-ld">
+                Email
+              </td>
+              <td class="comp-detail-body-rd">
+                {{ displayDetail.email }}
+              </td>
+
+            </tr>
+            <tr>
+              <td class="comp-detail-body-ld">
                 User Role
               </td>
               <td class="comp-detail-body-rd" >

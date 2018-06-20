@@ -30,8 +30,8 @@
       "property": "create"
     },
     {
-      "principalType": "ROLE",
       "accessType": "WRITE",
+      "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW"
     },
@@ -95,7 +95,6 @@
       "permission": "ALLOW",
       "property": "updateAll"
     }
-
   ],
   "methods": {}
 }

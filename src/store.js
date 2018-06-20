@@ -16,13 +16,20 @@ export default new Vuex.Store({
     //userlist: []
     memoList: [],
     tfile_names: {},
+    corrLogData: {},
+    correspondenceAssignLogs: [],
     uploadedFiles: [],
     fetchedCorrespondence: null,
     fetchedCorrDetails: null,
     corrTypes: null,
     userRole: null,
     assignCorrId: null,
-    userInfoDetails: null
+    userInfoDetails: null,
+    toUser: {},
+    myAssignedMemos: null,
+    //fromName: null,
+    assignedLogs: null,
+    currentUserRole: null
 
     //showDetailModal: false
   },
@@ -65,6 +72,21 @@ export default new Vuex.Store({
     },
     storeUserInfo(state, userInfo){
       state.userInfoDetails = userInfo
+    },
+    storeToUser(state, toUser){
+      state.toUser = toUser
+    },
+    storeMyMemos(state, myAssignedMemos){
+      state.myAssignedMemos = myAssignedMemos
+    },
+    // storeFromName(state, fromName){
+    //   state.fromName = fromName
+    // },
+    storeAssignedLogs(state, assignedLogs){
+      state.assignedLogs = assignedLogs
+    },
+    storeCurrentUserRole(state, currentUserRole){
+      state.currentUserRole = currentUserRole
     }
 
     // changeShowDetailModal(state){
@@ -76,7 +98,7 @@ export default new Vuex.Store({
     login ({commit, dispatch, state}, authData){
       axios.post('/MemoUsers/login', authData)
         .then(res => {
-
+          //console.log('logged in user', res)
           commit('authUser', {
             tokenId: res.data.id,
             userId: res.data.userId
@@ -84,15 +106,33 @@ export default new Vuex.Store({
           var expirationTIme = 1800000;
           let currentUserTokenId = res.data.id;
           let currentUserId = res.data.userId;
+
+
           const now = new Date()
           const expirationDate = new Date(now.getTime() + expirationTIme)
-          console.log('Token is :', currentUserTokenId)
+          //console.log('Token is :', currentUserTokenId)
           localStorage.setItem('token', currentUserTokenId)
             localStorage.setItem('userId', currentUserId)
           localStorage.setItem('expirationDate', expirationDate)
 
           dispatch('setLogoutTimer', expirationTIme)
           router.push('/my-correspondence')
+          //dispatch('getUserRole', currentUserId)
+
+          // axios.get('/MemoUsers/' + currentUserId + '?access_token='+token)
+          //
+          //   .then(res => {
+          //     const userRole = res.data.userRole
+          //     console.log('Current User Role is ', data)
+          //     localStorage.setItem('userRole', userRole)
+          //
+          //     router.push('/my-correspondence')
+          //     //commit('storeUser', data)
+          //
+          //   })
+          //   .catch(error => console.log(error))
+
+
         })
         .catch(error => {
 
@@ -101,6 +141,34 @@ export default new Vuex.Store({
 
 
 
+    },
+    getUserRole({commit, state}) {
+      let currentUserId = localStorage.getItem('userId')
+      let token = localStorage.getItem('token')
+      axios.get('/MemoUsers/' + currentUserId + '?access_token='+token)
+
+        .then(res => {
+
+          const userRole = res.data.userRole
+          axios.get('/userRoles/' +userRole+ '?access_token=' + state.tokenId)
+            .then(res1 => {
+              //console.log(res1)
+              const CurrentUserRole = res1.data.userRole
+              console.log('Current User Role is ', CurrentUserRole)
+
+              localStorage.setItem('userRole', CurrentUserRole)
+              commit('storeCurrentUserRole', CurrentUserRole)
+            })
+            .catch(error1=> {
+              console.log(error1)
+
+            })
+
+          //router.push('/my-correspondence')
+             //commit('storeUser', data)
+
+        })
+        .catch(error => console.log(error))
     },
     autoLogin ({commit, dispatch}) {
       dispatch('getAllCorrTypes')
@@ -129,6 +197,7 @@ export default new Vuex.Store({
           localStorage.removeItem('expirationDate')
           localStorage.removeItem('token')
           localStorage.removeItem('userId')
+          localStorage.removeItem('userRole')
           router.push('/')
         })
         .catch(error =>{
@@ -181,7 +250,7 @@ export default new Vuex.Store({
 
             tempFiles.push(state.tfile_names)
 
-            console.log('tfilenames', state.tfile_names )
+            //console.log('tfilenames', state.tfile_names )
           }
           commit('storeMemoAttachment', tempFiles)
           // state.tfile_names = state.uploadedFiles;
@@ -223,7 +292,7 @@ export default new Vuex.Store({
 
         .then(res => {
           const data = res.data
-          console.log('data', data)
+          //console.log('data', data)
 
           commit('storeUser', data)
 
@@ -236,7 +305,7 @@ export default new Vuex.Store({
 
         .then(res => {
           const data = res.data
-          console.log('data', data)
+          //console.log('data', data)
 
           commit('storeUserInfo', data)
           setTimeout(
@@ -253,7 +322,7 @@ export default new Vuex.Store({
 
         .then(res => {
           const data = res.data
-          console.log('data', data)
+          //console.log('data', data)
 
           commit('storeUserInfo', data)
           setTimeout(
@@ -274,21 +343,25 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+
     addCorrespondence({commit, state}, correspondenceData){
       axios.post('/AddMemos?access_token=' + state.tokenId, correspondenceData)
         .then(res => {
-          console.log(res)
+          //console.log(res)
           const corrData = {
             correspondenceId: res.data.id,
-            fromUserId: res.data.fromWhere,
+            fromUserId: localStorage.getItem('userId'),
             toUserId: localStorage.getItem('userId'),
-            dateReceived: res.data.dateReceived
+            dateReceived: res.data.dateReceived,
+            dateAssigned: '',
+            duration: '',
+            comments: ''
 
           }
           //console.log('Assignment', corrData)
-          axios.post('/corrAssignments?access_token=' + state.tokenId, corrData)
+          axios.post('/assignCorrs?access_token=' + state.tokenId, corrData)
             .then(res => {
-              console.log(res)
+              //console.log(res)
             })
             .catch(error => {
               console.log(error)
@@ -305,6 +378,24 @@ export default new Vuex.Store({
         .then(res => {
           const memos = res.data
           commit('storeMemos', memos)
+        })
+        .catch(error=> {
+          console.log(error)
+
+        })
+    },
+    getMyCorrespondence({commit, state}) {
+      axios.get('/AddMemos?access_token=' + state.tokenId)
+
+        .then(res => {
+          var myUserId = state.userId
+
+          var myAssignedMemo = res.data
+          var myFilteredMemo = myAssignedMemo.filter(function (AssignedMemo) {
+            return AssignedMemo.currentUserAssignedId === myUserId;
+
+          })
+          commit('storeMyMemos', myFilteredMemo)
         })
         .catch(error=> {
           console.log(error)
@@ -366,7 +457,7 @@ export default new Vuex.Store({
     addCorrType({commit, state}, formData) {
       axios.post('/corrTypes?access_token=' + state.tokenId, formData)
         .then(res => {
-          console.log(res)
+          //console.log(res)
           this.dispatch('getAllCorrTypes')
 
         })
@@ -377,7 +468,7 @@ export default new Vuex.Store({
     getAllCorrTypes({commit, state}){
       axios.get('/corrTypes?access_token=' + state.tokenId)
         .then(res => {
-          console.log(res)
+          //console.log(res)
           const corrTypes = res.data
           //console.log('Memos', corrTypes)
           commit('storeCorrTypes', corrTypes)
@@ -390,7 +481,7 @@ export default new Vuex.Store({
     addUserRoleTypes({commit, state}, formData) {
       axios.post('/userRoles?access_token=' + state.tokenId, formData)
         .then(res => {
-          console.log(res)
+          //console.log(res)
           this.dispatch('getAllUserRoles')
 
         })
@@ -401,7 +492,7 @@ export default new Vuex.Store({
     getAllUserRoles({commit, state}){
       axios.get('/userRoles?access_token=' + state.tokenId)
         .then(res => {
-          console.log(res)
+          //console.log(res)
           const userRoles = res.data
 
           commit('storeUserRoles', userRoles)
@@ -415,21 +506,21 @@ export default new Vuex.Store({
       commit('storeAssignCorrId', correspondenceId)
       //console.log('assign corr Id', correspondenceId)
     },
-    assignCorrTo({commit, state}, formData){
+    assignCorrTo({commit, state, dispatch}, formData) {
 
       const corrId = formData.correspondenceId
-      console.log('corr', corrId)
+      //console.log('corr', corrId)
 
-      axios.get('/corrAssignments?access_token=' + state.tokenId )
+      axios.get('/assignCorrs?access_token=' + state.tokenId)
         .then(res => {
 
           console.log('update assigned correspondence', res.data)
           var getAllAssignedCorr = res.data
-          var filteredCorr = getAllAssignedCorr.filter(function(AssignedCorr){
+          var filteredCorr = getAllAssignedCorr.filter(function (AssignedCorr) {
             return AssignedCorr.correspondenceId === corrId;
 
-          }).filter(function(filteredDate){
-            return filteredDate.dateAssigned === null
+          }).filter(function (filteredDate) {
+            return filteredDate.dateAssigned === ''
           })
           var dateAssigned = new Date()
           var dateDiff = moment(dateAssigned).diff(moment(filteredCorr[0].dateReceived), 'days')
@@ -439,31 +530,108 @@ export default new Vuex.Store({
             duration: dateDiff
 
           }
-          console.log('duration', dateDiff)
-          axios.patch('/corrAssignments/' + filteredCorr[0].id + '?access_token=' + state.tokenId, updateAssignedCorr)
+          //console.log('formdata', formData)
+          axios.patch('/assignCorrs/' + filteredCorr[0].id + '?access_token=' + state.tokenId, updateAssignedCorr)
             .then(res => {
-              axios.post('/corrAssignments?access_token=' + state.tokenId, formData)
+
+              axios.post('/assignCorrs?access_token=' + state.tokenId, formData)
                 .then(res => {
-                  console.log(res)
+
+                  var currentUserAssignedId = formData.toUserId
+                  axios.patch('/AddMemos/'+ corrId + '?access_token=' + state.tokenId, {'currentUserAssignedId': currentUserAssignedId})
+                    .then(res => {
+                      dispatch('getAllCorrespondence')
+                      console.log('current user assign success' , res)
+                    }).catch(error=>{
+                      console.log('current user assign error', error)
+                  })
+
+                  // const toUserId = res.data.toUserId
+                  // axios.get('/MemoUsers/'+toUserId+'?access_token=' + state.tokenId)
+                  //   .then(res => {
+                  //     var toUserName = res.data
+                  //     console.log('User Name', toUserName)
+                  //     //dispatch('')
+                  //     commit('storeToUser', toUserName)
+                  //   })
+                  //   .catch(error => {
+                  //     console.log(error)
+                  //   })
+                  //dispatch('getUser', res.data.toUserId)
+                  // commit('storeToUserId', res.data.toUserId)
+                  //console.log(res)
                 })
                 .catch(error => {
                   console.log(error)
                 })
-              console.log(res)
+              //console.log(res)
             })
 
-            .catch(error =>{
+            .catch(error => {
               console.log(error)
             })
-          console.log('filtered Corr', filteredCorr)
+          //console.log('filtered Corr', filteredCorr)
 
         })
-        .catch(error =>{
+        .catch(error => {
           console.log(error)
         })
 
+    },
+    toUserAssigned({commit, state}, correspondenceId){
+      axios.get('/assignCorrs?access_token=' + state.tokenId )
+        .then(res => {
+
+
+          var allAssignedCorr = res.data
+          var filteredCorr = allAssignedCorr.filter(function (AssignedCorr) {
+            return AssignedCorr.correspondenceId === correspondenceId;
+
+          }).filter(function (filteredDate) {
+            return filteredDate.dateAssigned === ''
+          })
+          console.log('assigned correspondence', filteredCorr)
+          var toUserId = filteredCorr[0].toUserId
+          var dateOfAssignment = filteredCorr[0].dateReceived
+          var duration = filteredCorr[0].duration
+          axios.get('/MemoUsers/'+toUserId+'?access_token=' + state.tokenId)
+            .then(res => {
+              var toUserName = res.data.fullname
+
+              //dispatch('')
+              var toUserInfo = {
+                toUserName: toUserName,
+                dateOfAssignment: dateOfAssignment,
+                duration: duration
+              }
+              //console.log('User Name', toUserInfo)
+              commit('storeToUser', toUserInfo)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+
+
+
+          var assignCorrLogs = res.data
+          var filteredCorrLogs = assignCorrLogs.filter(function (CorrLogs) {
+
+            return CorrLogs.correspondenceId === correspondenceId;
+
+          })
+          commit('storeAssignedLogs', filteredCorrLogs)
+          console.log('filtered Corr Logs', filteredCorrLogs)
+
+          //commit('storeAssignedLogs', tempLogs)
+          //console.log('assignedlogs', tempLogs )
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      //console.log('correspondence Id', correspondenceId)
     }
   },
+
   getters: {
     user(state) {
       return state.user
@@ -472,7 +640,7 @@ export default new Vuex.Store({
       return state.memoList
     },
     memoAttachment(state){
-      console.log('uploaded files', state.uploadedFiles)
+      //console.log('uploaded files', state.uploadedFiles)
       return state.uploadedFiles
 
     },
@@ -492,10 +660,24 @@ export default new Vuex.Store({
       return state.assignCorrId
     },
     getAllUsers(state) {
+      //console.log('User Emails', state.users.email)
       return state.users
     },
     fetchedUserDetails(state){
       return state.userInfoDetails
+    },
+    assignedCorrUser(state){
+      //console.log('assignment detail object', state.toUser)
+      return state.toUser
+    },
+    getAllAssignedLogs(state){
+      return state.assignedLogs
+    },
+    getMyMemos(state) {
+      return state.myAssignedMemos
+    },
+    getCurrentUserRole(state){
+      return state.currentUserRole
     }
 
 

@@ -164,6 +164,7 @@
           dateReceived: this.dateReceived,
           subject: this.subject,
           fromWhere: this.fromWhere,
+          currentUserAssignedId: localStorage.getItem('userId'),
           'attachment': attach
         }
         console.log(' Date data', formData.dateReceived)

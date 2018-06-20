@@ -43,7 +43,7 @@
                       <div class="box-body">
                         <table id="example1" class="table table-bordered table-striped">
                           <thead>
-                          <tr v-for="">
+                          <tr>
                             <th>To Whom Received</th>
                             <th>Type of Correspondence</th>
                             <th>Subject Matter</th>
@@ -52,7 +52,8 @@
                             <th>Assigned To</th>
                             <th>Edit</th>
                             <th>Details</th>
-                            <th>Assign</th>
+                            <th>Status</th>
+                            <th>Assign </th>
                           </tr>
                           </thead>
                           <tbody>
@@ -68,8 +69,15 @@
                             </td>
                             <td>{{ memo.subject }}</td>
                             <td> {{ memo.fromWhere }}</td>
-                            <td> {{ memo.dateReceived }}</td>
-                            <td>Maxwell Marfo </td>
+                            <td> {{ memo.dateReceived  | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}</td>
+                            <td >
+                              <div v-for="user in users">
+
+                              <span v-if="user.id == memo.currentUserAssignedId" >
+                                {{ user.fullname }}
+                              </span>
+                              </div>
+                            </td>
                             <td> <router-link
                               tag="button"
                               :to="{ name: 'EditCorrespondence', params: { correspondenceId: memo.id } }"
@@ -78,6 +86,7 @@
 
                               @click="getCorrespondenceDetails(memo.id)"
                               class="btn btn-primary">Details</button></td>
+                            <td><button  class="btn btn-success">Active</button> </td>
 
                             <td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>
                           </tr>
@@ -93,6 +102,7 @@
                             <th>Assigned To</th>
                             <th>Edit</th>
                             <th>Details</th>
+                            <th>Status</th>
                             <th>Assign</th>
                           </tr>
                           </tfoot>
@@ -148,6 +158,8 @@
   export default {
     data(){
       return {
+
+        //toUSerName: this.$store.getters.assignedCorrUser
 //        showDetailModal: false
       }
     },
@@ -164,12 +176,21 @@
 
     computed: {
       memos () {
-
+        //console.log('users name is', this.toUSerName)
         return this.$store.getters.memos
 
       },
+      users() {
+
+        return this.$store.getters.getAllUsers
+      },
+      userAssigned() {
+        console.log('full name is', this.$store.getters.assignedCorrUser)
+        //return this.$store.getters.assignedCorrUser
+      return this.$store.getters.assignedCorrUser
+      },
       getCorrTypes(){
-        console.log('corr types', this.$store.getters.getAllCorrTypes)
+        console.log('correspon types', this.$store.getters.getAllCorrTypes)
         return this.$store.getters.getAllCorrTypes
       }
 
@@ -177,12 +198,15 @@
     created() {
       this.$store.dispatch('getAllCorrespondence')
       this.$store.dispatch('getAllCorrTypes')
+      this.$store.dispatch('getAllUsers')
+
     },
 
     methods: {
       getCorrespondenceDetails(correspondenceId){
 
-        console.log(correspondenceId)
+        this.$store.dispatch('toUserAssigned', correspondenceId)
+//        this.$store.dispatch('assignCorrTo', correspondenceId)
         this.$store.dispatch('fetchCorrDetails', correspondenceId)
       },
       assignTo(correspondenceId){

@@ -1,5 +1,5 @@
 {
-  "name": "corrAssignment",
+  "name": "assignCorr",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -19,10 +19,10 @@
       "required": true
     },
     "dateReceived": {
-      "type": "date"
+      "type": "string"
     },
     "dateAssigned": {
-      "type": "date"
+      "type": "string"
     },
     "duration": {
       "type": "string"

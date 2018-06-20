@@ -16,10 +16,14 @@
 
               <div class="form-group">
                 <label>Assign To</label>
-                <model-select :options="options"
-                              v-model="item"
-                              placeholder="Select User Email">
-                </model-select>
+                <!--<model-select :options="getAllUserEmails.email"-->
+                              <!--v-model="emailSelect"-->
+                              <!--placeholder="Select User Email">-->
+                <!--</model-select>-->
+                <select class="form-control" v-model="emailSelect">
+                  <option v-for="getAllUserEmail in getAllUserEmails" :value="getAllUserEmail.id"  placeholder="Select User Email">{{ getAllUserEmail.email }}</option>
+
+                </select>
               </div>
 
               <div class="form-group">
@@ -54,25 +58,23 @@
   export default {
     data () {
       return {
-        options: [
-          { value: '1', text: 'osman.alhassan@nca.org.gh' },
-          { value: '2', text: 'richosmanthus@gmail.com' },
-          { value: '3', text: 'joemo@gmail.com' }
-
-        ],
-        item:  '',
-          //text: ''
-        //},
+//        options: [
+//          { value: '1', text: 'osman.alhassan@nca.org.gh' },
+//          { value: '2', text: 'richosmanthus@gmail.com' },
+//          { value: '3', text: 'joemo@gmail.com' }
+//
+//        ],
+        emailSelect: '',
         comments: ''
       }
     },
     computed: {
-
+//      this.$store.dispatch('getAllUserEmails')
       //return this.$store.getters.getAssignCorrId
-//      displayDetail (){
-////        console.log('corr types', this.$store.getters.getAllCorrTypes)
-//        return this.$store.getters.getAssignCorrId
-//      },
+      getAllUserEmails (){
+        //console.log('Users Emails', this.$store.getters.getAllUsers)
+        return this.$store.getters.getAllUsers
+      },
 //      corrTypes(){
 //        console.log('corr types', this.$store.getters.getAllCorrTypes)
 //        return this.$store.getters.getAllCorrTypes
@@ -80,7 +82,7 @@
 
     },
     created() {
-//      this.$store.dispatch('guser')
+     this.$store.dispatch('getAllUsers')
 
     },
     methods:{
@@ -88,19 +90,17 @@
 
        // const dateAssigned = new Date()
         const formData = {
-          toUserId: this.item,
-          //comments: this.comments,
+          toUserId: this.emailSelect,
+          comments: this.comments,
           fromUserId: localStorage.getItem('userId'),
           dateReceived: new Date(),
           correspondenceId: this.$store.getters.getAssignCorrId,
-          dateAssigned: null,
-          duration: null
-          //subject: this.subject,
-         //
-          //fromWhere: this.fromWhere
-          //attachment: ''
+          dateAssigned: '',
+          duration: ''
+
+
         }
-        console.log('something', formData.dateReceived)
+        console.log('something', formData)
         this.$store.dispatch('assignCorrTo', formData)
         $("#showAssignTo").modal("hide")
 

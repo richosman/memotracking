@@ -67,12 +67,10 @@
                     <div class="form-group">
                       <label>Date Received:</label>
 
-                      <div class="input-group">
-                        <div class="input-group-addon">
-                          <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" id="dateReceived" :value="correspondence.dateReceived" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
-                      </div>
+                      <!--<datepicker v-model="dateReceived" name="dateReceived" :format="customFormatter"></datepicker>-->
+                      <!--<datepicker id="dateReceived" :value="correspondence.dateReceived" name="dateReceived" :format="customFormatter"></datepicker>-->
+                        <input type="text" id="dateReceived" :value="correspondence.dateReceived" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask disabled>
+
                       <!-- /.input group -->
                     </div>
 
@@ -119,6 +117,7 @@
   import HeaderNav from '../header/HeaderNav.vue'
   import Sidebar from '../sidebar/Sidebar.vue'
   import Footer from '../footer/Footer.vue'
+  import Datepicker from 'vuejs-datepicker';
 
   export default {
     data(){
@@ -131,7 +130,8 @@
     components:{
       appHeaderNav:HeaderNav,
       appSidebar:Sidebar,
-      appFooter:Footer
+      appFooter:Footer,
+      Datepicker
     },
     computed: {
 //      getMemoAttachment(){
@@ -172,6 +172,9 @@
         //console.log('send formDate', {formData, id: this.correspondenceId})
         this.$store.dispatch('editCorrespondence', {formData, id: this.correspondenceId})
 
+      },
+      customFormatter(date) {
+        return moment(date).format('MMMM Do YYYY, h:mm:ss a');
       },
 //      memoFileUpload(event) {
 //        this.$store.dispatch('processFile', event)

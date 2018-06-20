@@ -17,7 +17,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Dashboard
+            My Correspondences
 
           </h1>
 
@@ -43,29 +43,52 @@
                       <div class="box-body">
                         <table id="example1" class="table table-bordered table-striped">
                           <thead>
-                          <tr v-for="">
+                          <tr>
                             <th>To Whom Received</th>
                             <th>Type of Correspondence</th>
                             <th>Subject Matter</th>
                             <th>From</th>
                             <th>Date Received</th>
-                            <th>Download</th>
+                            <th>Assigned To</th>
+                              <!--<th>Edit</th>-->
                             <th>Details</th>
-                            <th>Date Assigned</th>
-                            <th>Assign</th>
+                            <th>Status</th>
+                            <th>Assign </th>
                           </tr>
                           </thead>
                           <tbody>
-                          <tr >
-                            <td> osman </td>
-                            <td>memo</td>
-                            <td>request for funds</td>
-                            <td> Finance</td>
-                            <td> 23/03/1986</td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
+                          <tr v-for=" memo in myMemos">
+                            <td> {{ memo.toWhom }} </td>
+                            <td>
+                              <div v-for="corrType in getCorrTypes" >
+                                <span v-if="memo.typeOfCorrespondence == corrType.id">
+
+                                    {{ corrType.typeOfCorrespondence }}
+                                </span>
+                              </div>
+                            </td>
+                            <td>{{ memo.subject }}</td>
+                            <td> {{ memo.fromWhere }}</td>
+                            <td> {{ memo.dateReceived  | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}</td>
+                            <td >
+                              <div v-for="user in users">
+
+                              <span v-if="user.id == memo.currentUserAssignedId" >
+                                {{ user.fullname }}
+                              </span>
+                              </div>
+                            </td>
+                            <!--<td> <router-link-->
+                              <!--tag="button"-->
+                              <!--:to="{ name: 'EditCorrespondence', params: { correspondenceId: memo.id } }"-->
+                              <!--class="btn btn-primary">Edit</router-link></td>-->
+                            <td> <button
+
+                              @click="getCorrespondenceDetails(memo.id)"
+                              class="btn btn-primary">Details</button></td>
+                            <td><button  class="btn btn-success">Active</button> </td>
+
+                            <td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>
                           </tr>
                           </tbody>
 
@@ -76,9 +99,10 @@
                             <th>Subject Matter</th>
                             <th>From</th>
                             <th>Date Received</th>
-                            <th>Download</th>
+                            <th>Assigned To</th>
+                            <!--<th>Edit</th>-->
                             <th>Details</th>
-                            <th>Date Assigned</th>
+                            <th>Status</th>
                             <th>Assign</th>
                           </tr>
                           </tfoot>
@@ -109,44 +133,94 @@
 
 
     </div>
+
+
+    <!-- Modal -->
+
+    <app-view-details></app-view-details>
+    <app-assign-modal></app-assign-modal>
+
+
+
   </div>
+
 </template>
 
 <script>
   import HeaderNav from '../header/HeaderNav.vue'
   import Sidebar from '../sidebar/Sidebar.vue'
   import Footer from '../footer/Footer.vue'
+  import ViewDetails from './ViewDetails.vue'
+  import AssignModal from './Assign.vue'
+
+
   import axios from 'axios'
   export default {
+    data(){
+      return {
+
+        //toUSerName: this.$store.getters.assignedCorrUser
+//        showDetailModal: false
+      }
+    },
     components:{
       appHeaderNav:HeaderNav,
       appSidebar:Sidebar,
-      appFooter:Footer
+      appFooter:Footer,
+      appViewDetails: ViewDetails,
+      appAssignModal: AssignModal
+
+
+
+    },
+
+    computed: {
+      myMemos () {
+        //console.log('users name is', this.toUSerName)
+        return this.$store.getters.getMyMemos
+
+      },
+      users() {
+
+        return this.$store.getters.getAllUsers
+      },
+      userAssigned() {
+        //console.log('full name is', this.$store.getters.assignedCorrUser)
+        //return this.$store.getters.assignedCorrUser
+        return this.$store.getters.assignedCorrUser
+      },
+      getCorrTypes(){
+        //console.log('correspon types', this.$store.getters.getAllCorrTypes)
+        return this.$store.getters.getAllCorrTypes
+      }
+
     },
     created() {
-      // console.log('corr types', this.$store.getters.getAllCorrTypes)
-
+      this.$store.dispatch('getMyCorrespondence')
       this.$store.dispatch('getAllCorrTypes')
-      this.$store.dispatch('getUser')
-      this.$store.dispatch('getAllUserRoles')
+      this.$store.dispatch('getAllUsers')
+      this.$store.dispatch('getUserRole')
 
+    },
+
+    methods: {
+      getCorrespondenceDetails(correspondenceId){
+
+        this.$store.dispatch('toUserAssigned', correspondenceId)
+//        this.$store.dispatch('assignCorrTo', correspondenceId)
+        this.$store.dispatch('fetchCorrDetails', correspondenceId)
+      },
+      assignTo(correspondenceId){
+        $("#showAssignTo").modal("show")
+        //console.log(correspondenceId)
+        this.$store.dispatch('assignCorrId', correspondenceId)
+      }
 
     }
-
- //   computed: {
-//      memos () {
-//
-//        return this.$store.getters.memos
-//
-//      }
-//    },
-//    created() {
-//      this.$store.dispatch('getCorrespondence')
-//      //this.$store.getters.user
-//    }
   }
 </script>
 
-<style>
+<style scoped>
+
 </style>
 

@@ -15,8 +15,8 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
 
-        <li class="active treeview">
-          <router-link to="/home">
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
+          <router-link to="/home" >
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             <!--&lt;!&ndash;<span class="pull-right-container">&ndash;&gt;-->
               <!--<i class="fa fa-angle-left pull-right"></i>-->
@@ -24,7 +24,7 @@
           </router-link>
 
         </li>
-        <li class="active treeview">
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
           <router-link to="/admin-home">
             <i class="glyphicon glyphicon-wrench"></i> <span>Admin Config</span>
             <!--&lt;!&ndash;<span class="pull-right-container">&ndash;&gt;-->
@@ -43,7 +43,7 @@
           </router-link>
 
         </li>
-        <li class="treeview">
+        <li class="active treeview" v-if="getCurrentUserRole === 'Secretary'">
           <router-link to="/add-correspondence">
             <i class="fa fa-plus-square"></i>
             <span>Add Correspondence</span>
@@ -53,7 +53,17 @@
           </router-link>
 
         </li>
-        <li>
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
+          <router-link to="/add-correspondence">
+            <i class="fa fa-plus-square"></i>
+            <span>Add Correspondence</span>
+            <!--<span class="pull-right-container">-->
+            <!--<span class="label label-primary pull-right">4</span>-->
+            <!--</span>-->
+          </router-link>
+
+        </li>
+        <li class="active treeview">
           <router-link to="/view-correspondence">
             <i class="fa fa-eye"></i> <span>View Correspondence</span>
             <!--<span class="pull-right-container">-->
@@ -61,7 +71,7 @@
             <!--</span>-->
           </router-link>
         </li>
-        <li>
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
           <router-link to="/add-user">
             <i class="fa fa-user-plus"></i> <span>Add User</span>
             <!--<span class="pull-right-container">-->
@@ -69,7 +79,7 @@
             <!--</span>-->
           </router-link>
         </li>
-        <li>
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
           <router-link to="/view-users">
             <i class="fa fa-users"></i> <span>View Users</span>
             <!--<span class="pull-right-container">-->
@@ -89,7 +99,24 @@
 </template>
 
 <script>
-
+  import axios from 'axios'
+  export default {
+//    data (){
+//
+//      console.log('user is by ID', localStorage.getItem('userRole'))
+//      return localStorage.getItem('userId')
+//    },
+    computed: {
+      getCurrentUserRole(){
+        //console.log('user is', this.$store.getters.getCurrentUserRole)
+        return this.$store.getters.getCurrentUserRole
+      }
+    },
+    created() {
+      this.$store.dispatch('getAllUserRoles')
+      this.$store.dispatch('getUserRole')
+    }
+  }
 </script>
 
 <style scoped>
