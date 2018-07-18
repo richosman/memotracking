@@ -18,7 +18,7 @@ module.exports = function(Corrassignment) {
       from: 'jmosesessel21@gmail.com',
       subject: 'test mail',
       text: 'my text',
-      html: 'Testing mail settings'
+      html: `Testing mail settings`
     },function (err, mail) {
       console.log('email sent!', mail)
       console.log('err', err)
