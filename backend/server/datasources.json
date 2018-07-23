@@ -42,13 +42,13 @@
         "type": "SMTP",
         "host": "smtp.mailtrap.io",
         "secure": false,
-        "port": 465,
+        "port": 2525,
         "tls": {
           "rejectUnauthorized": false
         },
         "auth": {
-          "user": "f89cacab41efaa",
-          "pass": "d894f2448114ef"
+          "user": "4cb9a53b9de08b",
+          "pass": "31dce7fe4bf1b8"
         }
       }
     ]

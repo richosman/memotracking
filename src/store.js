@@ -502,7 +502,7 @@ export default new Vuex.Store({
 
         })
     },
-    assignCorrId({commit}, correspondenceId){
+    assignCorrId({commit, dispatch}, correspondenceId){
       commit('storeAssignCorrId', correspondenceId)
       //console.log('assign corr Id', correspondenceId)
     },
@@ -540,7 +540,8 @@ export default new Vuex.Store({
                   var currentUserAssignedId = formData.toUserId
                   axios.patch('/AddMemos/'+ corrId + '?access_token=' + state.tokenId, {'currentUserAssignedId': currentUserAssignedId})
                     .then(res => {
-                      dispatch('getAllCorrespondence')
+                     // dispatch('getAllCorrespondence')
+                      dispatch('getMyCorrespondence')
                       console.log('current user assign success' , res)
                     }).catch(error=>{
                       console.log('current user assign error', error)

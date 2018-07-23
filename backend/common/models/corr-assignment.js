@@ -2,16 +2,17 @@
 
 module.exports = function(Corrassignment) {
 
-  Corrassignment.observe('after save', function(ctx, next) {
-
-    console.log('ctx',ctx)
-
-    console.log('supports isNewInstance?', ctx.isNewInstance !== undefined);
-    next();
-  });
+  // Corrassignment.observe('after save', function(ctx, next) {
+  //
+  //   console.log('ctx',ctx)
+  //
+  //   console.log('supports isNewInstance?', ctx.isNewInstance !== undefined);
+  //   next();
+  // });
 
   Corrassignment.sendEmail = function (cb) {
     console.log('cb',cb)
+
     Corrassignment.app.models.Email.send({
 
       to: 'jmosesessel21@gmail.com',
