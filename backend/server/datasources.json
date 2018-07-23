@@ -33,5 +33,24 @@
         "pass": "0jemo20.@2016"
       }
     }]
+  },
+  "mailtrap": {
+    "name": "mailtrap",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.mailtrap.io",
+        "secure": false,
+        "port": 465,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "f89cacab41efaa",
+          "pass": "d894f2448114ef"
+        }
+      }
+    ]
   }
 }
