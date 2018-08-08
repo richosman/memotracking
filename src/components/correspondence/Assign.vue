@@ -1,6 +1,7 @@
 <template>
 
-  <div id="showAssignTo" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div id="showAssignTo" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+       aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -17,13 +18,25 @@
               <div class="form-group">
                 <label>Assign To</label>
                 <!--<model-select :options="getAllUserEmails.email"-->
-                              <!--v-model="emailSelect"-->
-                              <!--placeholder="Select User Email">-->
+                <!--v-model="emailSelect"-->
+                <!--placeholder="Select User Email">-->
                 <!--</model-select>-->
-                <select class="form-control" v-model="emailSelect">
-                  <option v-for="getAllUserEmail in getAllUserEmails" :value="getAllUserEmail.id"  placeholder="Select User Email">{{ getAllUserEmail.email }}</option>
+                <!--<el-select class="form-control" filterable v-model="emailSelect">-->
+                <!--<el-option v-for="getAllUserEmail in getAllUserEmails" :value="getAllUserEmail.id"  placeholder="Select User Email">{{ getAllUserEmail.email }}</el-option>-->
 
-                </select>
+                <!--</el-select>-->
+                <el-select
+                  v-model="emailSelect"
+                  filterable
+                  placeholder="Select"
+                >
+                  <el-option
+                    v-for="getAllUserEmail in getAllUserEmails"
+                    :key="getAllUserEmail.id"
+                    :label="getAllUserEmail.email"
+                    :value="getAllUserEmail.id">
+                  </el-option>
+                </el-select>
               </div>
 
               <div class="form-group">
@@ -51,12 +64,12 @@
 </template>
 
 <script>
-  import { ModelSelect } from 'vue-search-select'
+  import {ModelSelect} from 'vue-search-select'
   import router from '../../router/index'
   import axios from 'axios'
 
   export default {
-    data () {
+    data() {
       return {
 //        options: [
 //          { value: '1', text: 'osman.alhassan@nca.org.gh' },
@@ -71,7 +84,7 @@
     computed: {
 //      this.$store.dispatch('getAllUserEmails')
       //return this.$store.getters.getAssignCorrId
-      getAllUserEmails (){
+      getAllUserEmails() {
         //console.log('Users Emails', this.$store.getters.getAllUsers)
         return this.$store.getters.getAllUsers
       },
@@ -82,13 +95,13 @@
 
     },
     created() {
-     this.$store.dispatch('getAllUsers')
+      this.$store.dispatch('getAllUsers')
 
     },
-    methods:{
+    methods: {
       assign() {
 
-       // const dateAssigned = new Date()
+        // const dateAssigned = new Date()
         const formData = {
           toUserId: this.emailSelect,
           comments: this.comments,
@@ -107,14 +120,16 @@
       }
     },
 
-  components: {
-    ModelSelect
-  }
+    components: {
+      ModelSelect
+    }
 
   }
 
 </script>
 
 <style scoped>
-
+  .el-select {
+    width: 100%;
+  }
 </style>

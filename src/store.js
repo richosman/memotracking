@@ -140,8 +140,17 @@ export default new Vuex.Store({
 
         })
         .catch(error => {
+          // this.$notify.error({
+          //   title: 'Error',
+          //   message: 'Login Failed! Check Details and Try Again'
+          // });
+          Notification.error({
+            title: 'Error!',
+            message: `Login Failed! Check Details and Try Again`
+          });
 
-          router.push('/')
+          // Notification.error('Login Failed! Check Details and Try Again')
+          // router.push('/')
 
         })
 
@@ -581,16 +590,22 @@ export default new Vuex.Store({
           //console.log('formdata', formData)
           axios.patch('/assignCorrs/' + filteredCorr[0].id + '?access_token=' + state.tokenId, updateAssignedCorr)
             .then(res => {
-
+              console.log('before notify')
+              Notification.success({
+                title: 'Success',
+                message: 'Successful'
+              })
               axios.post('/assignCorrs?access_token=' + state.tokenId, formData)
                 .then(res => {
 
                   var currentUserAssignedId = formData.toUserId
                   axios.patch('/AddMemos/'+ corrId + '?access_token=' + state.tokenId, {'currentUserAssignedId': currentUserAssignedId})
                     .then(res => {
+
                      // dispatch('getAllCorrespondence')
                       dispatch('getMyCorrespondence')
                       console.log('current user assign success' , res)
+
                     }).catch(error=>{
                       console.log('current user assign error', error)
                   })

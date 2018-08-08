@@ -10,12 +10,19 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'
 
+import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/display.css';
+// import locale from 'element-ui/lib/locale/lang/en'
+
+// import { Notification } from 'element-ui';
+
 
 axios.defaults.baseURL = 'http://localhost:3000/api/'
 
 Vue.config.productionTip = false
 
 Vue.use(VueMoment)
+// Vue.use(Notification)
 
 Vue.use(ElementUI, { locale });
 
