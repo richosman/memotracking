@@ -21,18 +21,20 @@
     "nameConflict": "makeUnique"
   },
   "Email": {
-    "name": "sendMailDS",
+    "name": "Email",
     "connector": "mail",
-    "transports": [{
-      "type": "SMTP",
-      "host": "smtp.gmail.com",
-      "secure": true,
-      "port": 465,
-      "auth": {
-        "user": "jmosesessel21@gmail.com",
-        "pass": "0jemo20.@2016"
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "jmosesessel21@gmail.com",
+          "pass": "0jemo20.@2016"
+        }
       }
-    }]
+    ]
   },
   "mailtrap": {
     "name": "mailtrap",
@@ -42,7 +44,7 @@
         "type": "SMTP",
         "host": "smtp.mailtrap.io",
         "secure": false,
-        "port": 2525,
+        "port": 465,
         "tls": {
           "rejectUnauthorized": false
         },

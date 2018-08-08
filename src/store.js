@@ -22,6 +22,7 @@ export default new Vuex.Store({
     fetchedCorrespondence: null,
     fetchedCorrDetails: null,
     corrTypes: null,
+    corrNatures: null,
     userRole: null,
     assignCorrId: null,
     userInfoDetails: null,
@@ -63,6 +64,9 @@ export default new Vuex.Store({
     },
     storeCorrTypes(state, corrTypes){
       state.corrTypes = corrTypes
+    },
+    storeCorrNatures(state, corrNatures){
+      state.corrNatures = corrNatures
     },
     storeUserRoles(state, userRole){
       state.userRole = userRole
@@ -116,6 +120,7 @@ export default new Vuex.Store({
           localStorage.setItem('expirationDate', expirationDate)
 
           dispatch('setLogoutTimer', expirationTIme)
+
           router.push('/my-correspondence')
           //dispatch('getUserRole', currentUserId)
 
@@ -137,6 +142,7 @@ export default new Vuex.Store({
         .catch(error => {
 
           router.push('/')
+
         })
 
 
@@ -366,23 +372,41 @@ export default new Vuex.Store({
             .catch(error => {
               console.log(error)
             })
-          router.push('/view-correspondence')
+          router.push('/my-correspondence')
         })
         .catch(error => {
           console.log(error)
         })
     },
     getAllCorrespondence({commit, state}){
-      axios.get('/AddMemos?access_token=' + state.tokenId)
+     // axios.get('/AddMemos?access_token=' + state.tokenId)
 
-        .then(res => {
-          const memos = res.data
-          commit('storeMemos', memos)
-        })
-        .catch(error=> {
-          console.log(error)
+      const userRole = localStorage.getItem('userRole')
+      if (userRole === "Director") {
+        axios.get('/AddMemos?access_token=' + state.tokenId)
+        //axios.get('/AddMemos?filter={"where":{"natureOfCorrespondence":"Non-Confidential" }}')
+          .then(res => {
+            const memos = res.data
+            commit('storeMemos', memos)
+          })
+          .catch(error=> {
+            console.log(error)
 
-        })
+          })
+      }
+      else
+        axios.get('/AddMemos?filter={"where":{"natureOfCorrespondence":"Non-Confidential" }}')
+          .then(res => {
+            const memos = res.data
+            commit('storeMemos', memos)
+          })
+          .catch(error=> {
+            console.log(error)
+
+          })
+
+
+
     },
     getMyCorrespondence({commit, state}) {
       axios.get('/AddMemos?access_token=' + state.tokenId)
@@ -436,7 +460,7 @@ export default new Vuex.Store({
       const corrId = editFormData.id
       axios.put('/AddMemos/' + corrId + '?access_token=' + state.tokenId, editFormData.formData)
         .then(res => {
-          router.push('/view-correspondence')
+          router.push('/my-correspondence')
         })
         .catch(error => {
           console.log(error)
@@ -465,6 +489,17 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    addCorrNature({commit, state}, formData) {
+      axios.post('/corrNatures?access_token=' + state.tokenId, formData)
+        .then(res => {
+          //console.log(res)
+          this.dispatch('getAllCorrNatures')
+
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     getAllCorrTypes({commit, state}){
       axios.get('/corrTypes?access_token=' + state.tokenId)
         .then(res => {
@@ -472,6 +507,19 @@ export default new Vuex.Store({
           const corrTypes = res.data
           //console.log('Memos', corrTypes)
           commit('storeCorrTypes', corrTypes)
+        })
+        .catch(error=> {
+          console.log(error)
+
+        })
+    },
+    getAllCorrNatures({commit, state}){
+      axios.get('/corrNatures?access_token=' + state.tokenId)
+        .then(res => {
+          //console.log(res)
+          const corrNatures = res.data
+          //console.log('Memos', corrTypes)
+          commit('storeCorrNatures', corrNatures)
         })
         .catch(error=> {
           console.log(error)
@@ -653,6 +701,9 @@ export default new Vuex.Store({
     },
     getAllCorrTypes(state){
       return state.corrTypes
+    },
+    getAllCorrNatures(state){
+      return state.corrNatures
     },
     getAllUserRoles(state){
       return state.userRole

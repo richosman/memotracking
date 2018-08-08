@@ -39,8 +39,16 @@
 
                   <div class="box-body">
                     <div class="form-group">
-                      <label>To Whom Received</label>
+                      <label>Received From</label>
                       <input type="text" v-model="toWhom" class="form-control" placeholder="Enter ...">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Nature of Correspondence</label>
+                      <select class="form-control" v-model="natureOfCorrespondence">
+                        <option v-for="fetchedCorrNature in fetchedCorrNatures" :value="fetchedCorrNature.natureOfCorrespondence">{{ fetchedCorrNature.natureOfCorrespondence }}</option>
+
+                      </select>
                     </div>
 
                     <div class="form-group">
@@ -62,18 +70,19 @@
                           <label>Division/Company/Client</label>
                           <input type="text" v-model="fromWhere" class="form-control" placeholder="Enter ...">
                         </div>
-                    <div class="form-group">
-                      <label>Date Received:</label>
-                      <datepicker v-model="dateReceived" name="dateReceived" :format="customFormatter"></datepicker>
+                    <!--<div class="form-group">-->
+                      <!--<label>Date Received:</label>-->
+                      <!--<datepicker v-model="dateReceived" name="dateReceived" :format="customFormatter"></datepicker>-->
 
-                      <!--<div class="input-group">-->
-                        <!--<div class="input-group-addon">-->
-                          <!--<i class="fa fa-calendar"></i>-->
-                        <!--</div>-->
-                        <!--<input type="text" v-model="dateReceived" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>-->
-                      <!--</div>-->
-                      <!-- /.input group -->
-                    </div>
+                      <!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="input-group-addon">&ndash;&gt;-->
+                          <!--&lt;!&ndash;<i class="fa fa-calendar"></i>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<input type="text" v-model="dateReceived" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>&ndash;&gt;-->
+                      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                      <!--&lt;!&ndash; /.input group &ndash;&gt;-->
+                    <!--</div>-->
+
 
 
                       <div class="form-group">
@@ -124,6 +133,7 @@
       return {
         toWhom: '',
         typeOfCorrespondence: '',
+        natureOfCorrespondence: '',
         dateReceived: '',
         subject: '',
         fromWhere: '',
@@ -144,12 +154,18 @@
       fetchedCorrTypes () {
 
         return this.$store.getters.getAllCorrTypes
-        //console.log('corr type', coreType)
+
+      },
+      fetchedCorrNatures () {
+
+        return this.$store.getters.getAllCorrNatures
 
       }
     },
     created() {
       this.$store.dispatch('getAllCorrTypes')
+
+      this.$store.dispatch('getAllCorrNatures')
 
     },
     methods: {
@@ -161,13 +177,14 @@
         const formData = {
           toWhom: this.toWhom,
           typeOfCorrespondence: this.typeOfCorrespondence,
-          dateReceived: this.dateReceived,
+          natureOfCorrespondence: this.natureOfCorrespondence,
+          dateReceived: new Date(),
           subject: this.subject,
           fromWhere: this.fromWhere,
           currentUserAssignedId: localStorage.getItem('userId'),
           'attachment': attach
         }
-        console.log(' Date data', formData.dateReceived)
+        //console.log(' Date data', formData.dateReceived)
         this.$store.dispatch('addCorrespondence', formData)
 
       },

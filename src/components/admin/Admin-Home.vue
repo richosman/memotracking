@@ -31,6 +31,11 @@
 
            <app-user-role></app-user-role>
           </div>
+
+          <div class="row">
+
+            <app-nature-correspondence></app-nature-correspondence>
+          </div>
           <!-- /.row -->
 
         </section>
@@ -52,13 +57,16 @@
   import Footer from '../footer/Footer.vue'
   import TypeCorrespondence from './Type-Correspondence.vue'
   import UserRole from './User-Role.vue'
+  import NatureCorrespondence from './Nature-Correspondence.vue'
+
   export default {
     components:{
       appHeaderNav:HeaderNav,
       appSidebar:Sidebar,
       appFooter:Footer,
       appTypeCorrespondence:TypeCorrespondence,
-      appUserRole:UserRole
+      appUserRole:UserRole,
+      appNatureCorrespondence:NatureCorrespondence
     }
   }
 </script>

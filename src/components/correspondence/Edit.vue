@@ -39,19 +39,29 @@
 
                   <div class="box-body">
                     <div class="form-group">
-                      <label>To Whom Received</label>
+                      <label>Received From</label>
                       <input type="text" id="toWhom" :value="correspondence.toWhom" class="form-control" >
                     </div>
 
                     <div class="form-group">
-                      <label>Type of Correspondence</label>
-                      <select class="form-control" id="typeOfCorrespondence" :value="correspondence.typeOfCorrespondence">
+                      <label>Nature of Correspondence</label>
+                      <select class="form-control" id="natureOfCorrespondence" :value="correspondence.natureOfCorrespondence">
 
-                        <option v-for="fetchedCorrType in fetchedCorrTypes" :value="fetchedCorrType.id" :selected="fetchedCorrType.id == correspondence.typeOfCorrespondence">{{ fetchedCorrType.typeOfCorrespondence }}</option>
+                        <option v-for="fetchedCorrNature in fetchedCorrNatures" :value="fetchedCorrNature.natureOfCorrespondence" :selected="fetchedCorrNature.natureOfCorrespondence == correspondence.natureOfCorrespondence">{{ fetchedCorrNature.natureOfCorrespondence }}</option>
 
 
                       </select>
                     </div>
+
+                    <div class="form-group">
+                              <label>Type of Correspondence</label>
+                              <select class="form-control" id="typeOfCorrespondence" :value="correspondence.typeOfCorrespondence">
+
+                                <option v-for="fetchedCorrType in fetchedCorrTypes" :value="fetchedCorrType.id" :selected="fetchedCorrType.id == correspondence.typeOfCorrespondence">{{ fetchedCorrType.typeOfCorrespondence }}</option>
+
+
+                              </select>
+                            </div>
 
 
                     <div class="form-group">
@@ -147,6 +157,11 @@
 
         return this.$store.getters.getAllCorrTypes
 
+      },
+      fetchedCorrNatures () {
+
+        return this.$store.getters.getAllCorrNatures
+
       }
 
     },
@@ -154,7 +169,9 @@
 
       this.$store.dispatch('fetchCorrespondence', this.correspondenceId)
 
-        this.$store.dispatch('getAllCorrTypes')
+      this.$store.dispatch('getAllCorrTypes')
+
+      this.$store.dispatch('getAllCorrNatures')
 
     },
 
@@ -164,6 +181,7 @@
         const formData = {
           toWhom: document.getElementById('toWhom').value,
           typeOfCorrespondence: document.getElementById('typeOfCorrespondence').value,
+          natureOfCorrespondence: document.getElementById('natureOfCorrespondence').value,
           subject: document.getElementById('subject').value,
           dateReceived: document.getElementById('dateReceived').value,
           fromWhere: document.getElementById('fromWhere').value,

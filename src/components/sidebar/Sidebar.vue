@@ -43,17 +43,18 @@
           </router-link>
 
         </li>
-        <li class="active treeview" v-if="getCurrentUserRole === 'Secretary'">
-          <router-link to="/add-correspondence">
-            <i class="fa fa-plus-square"></i>
-            <span>Add Correspondence</span>
-            <!--<span class="pull-right-container">-->
-              <!--<span class="label label-primary pull-right">4</span>-->
-            <!--</span>-->
-          </router-link>
+        <!--<li class="active treeview" v-if="getCurrentUserRole === 'Secretary'">-->
+          <!--<router-link to="/add-correspondence">-->
+            <!--<i class="fa fa-plus-square"></i>-->
+            <!--<span>Add Correspondence</span>-->
+            <!--&lt;!&ndash;<span class="pull-right-container">&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="label label-primary pull-right">4</span>&ndash;&gt;-->
+            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+          <!--</router-link>-->
 
-        </li>
-        <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
+        <!--</li>-->
+
+        <li class="active treeview" v-if="getCurrentUserRole === 'Director' || getCurrentUserRole === 'Secretary'">
           <router-link to="/add-correspondence">
             <i class="fa fa-plus-square"></i>
             <span>Add Correspondence</span>
@@ -78,7 +79,7 @@
               <!--<small class="label pull-right bg-green">new</small>-->
             <!--</span>-->
           </router-link>
-        </li>
+        <!--</li>-->
         <li class="active treeview" v-if="getCurrentUserRole === 'Director'">
           <router-link to="/view-users">
             <i class="fa fa-users"></i> <span>View Users</span>
@@ -108,7 +109,6 @@
 //    },
     computed: {
       getCurrentUserRole(){
-        //console.log('user is', this.$store.getters.getCurrentUserRole)
         return this.$store.getters.getCurrentUserRole
       }
     },

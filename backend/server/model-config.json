@@ -65,5 +65,9 @@
   },
   "Email": {
     "dataSource": "mailtrap"
+  },
+  "corrNature": {
+    "dataSource": "memotrackingdb",
+    "public": true
   }
 }

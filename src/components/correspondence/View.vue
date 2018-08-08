@@ -44,20 +44,21 @@
                         <table id="example1" class="table table-bordered table-striped">
                           <thead>
                           <tr>
-                            <th>To Whom Received</th>
+                            <th>Received From</th>
                             <th>Type of Correspondence</th>
+                            <th>Nature of Correspondence</th>
                             <th>Subject Matter</th>
                             <th>From</th>
                             <th>Date Received</th>
                             <th>Assigned To</th>
-                            <th>Edit</th>
+                            <th v-if="getCurrentUserRole === 'Director' ">Re-Assign</th>
                             <th>Details</th>
                             <th>Status</th>
-                            <th>Assign </th>
+                            <!--<th>Assign </th>-->
                           </tr>
                           </thead>
                           <tbody>
-                          <tr v-for=" memo in memos">
+                          <tr v-for=" memo in memos" >
                             <td> {{ memo.toWhom }} </td>
                             <td>
                               <div v-for="corrType in getCorrTypes" >
@@ -66,6 +67,18 @@
                                     {{ corrType.typeOfCorrespondence }}
                                 </span>
                               </div>
+                            </td>
+                            <!--<td>-->
+                              <!--<div v-for="corrNature in getCorrNatures" >-->
+                                <!--<span v-if="memo.natureOfCorrespondence == corrNature.id">-->
+
+                                    <!--{{ corrNature.natureOfCorrespondence }}-->
+                                <!--</span>-->
+                              <!--</div>-->
+                            <!--</td>-->
+                            <td>
+
+                              {{ memo.natureOfCorrespondence }}
                             </td>
                             <td>{{ memo.subject }}</td>
                             <td> {{ memo.fromWhere }}</td>
@@ -78,32 +91,35 @@
                               </span>
                               </div>
                             </td>
-                            <td> <router-link
-                              tag="button"
-                              :to="{ name: 'EditCorrespondence', params: { correspondenceId: memo.id } }"
-                              class="btn btn-primary">Edit</router-link></td>
-                            <td> <button
+
+                          <td v-if="getCurrentUserRole === 'Director' ">
+                            <button  @click="assignTo(memo.id)" class="btn btn-success">Re-Assign</button>
+                          </td>
+                            <td>
+                              <button
 
                               @click="getCorrespondenceDetails(memo.id)"
-                              class="btn btn-primary">Details</button></td>
+                              class="btn btn-primary">Details</button>
+                            </td>
                             <td><button  class="btn btn-success">Active</button> </td>
 
-                            <td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>
+                            <!--<td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>-->
                           </tr>
                           </tbody>
 
                           <tfoot>
                           <tr>
-                            <th>To Whom Received</th>
+                            <th>Received From</th>
                             <th>Type of Correspondence</th>
+                            <th>Nature of Correspondence</th>
                             <th>Subject Matter</th>
                             <th>From</th>
                             <th>Date Received</th>
                             <th>Assigned To</th>
-                            <th>Edit</th>
+                            <th v-if="getCurrentUserRole === 'Director' ">Re-Assign</th>
                             <th>Details</th>
                             <th>Status</th>
-                            <th>Assign</th>
+                            <!--<th>Assign</th>-->
                           </tr>
                           </tfoot>
                         </table>
@@ -185,20 +201,30 @@
         return this.$store.getters.getAllUsers
       },
       userAssigned() {
-        console.log('full name is', this.$store.getters.assignedCorrUser)
+        //console.log('full name is', this.$store.getters.assignedCorrUser)
         //return this.$store.getters.assignedCorrUser
       return this.$store.getters.assignedCorrUser
       },
       getCorrTypes(){
-        console.log('correspon types', this.$store.getters.getAllCorrTypes)
+        //console.log('correspon types', this.$store.getters.getAllCorrTypes)
         return this.$store.getters.getAllCorrTypes
+      },
+      getCurrentUserRole(){
+        return this.$store.getters.getCurrentUserRole
       }
+
+//      getCorrNatures(){
+//        //console.log('correspon types', this.$store.getters.getAllCorrTypes)
+//        return this.$store.getters.getAllCorrNatures
+//      }
 
     },
     created() {
       this.$store.dispatch('getAllCorrespondence')
       this.$store.dispatch('getAllCorrTypes')
+      //this.$store.dispatch('getAllCorrNatures')
       this.$store.dispatch('getAllUsers')
+      this.$store.dispatch('getUserRole')
 
     },
 
@@ -222,4 +248,5 @@
 <style scoped>
 
 </style>
+
 
