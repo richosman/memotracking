@@ -9,7 +9,7 @@ import VueMoment from 'vue-moment'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'
-
+import VueSwal from 'vue-swal'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/display.css';
 // import locale from 'element-ui/lib/locale/lang/en'
@@ -22,6 +22,7 @@ axios.defaults.baseURL = 'http://localhost:3000/api/'
 Vue.config.productionTip = false
 
 Vue.use(VueMoment)
+Vue.use(VueSwal)
 // Vue.use(Notification)
 
 Vue.use(ElementUI, { locale });

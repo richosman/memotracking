@@ -58,8 +58,13 @@
                           </tr>
                           </thead>
                           <tbody>
-                          <tr v-for=" memo in myMemos">
-                            <td> {{ memo.toWhom }} </td>
+                          <tr v-for=" (memo, index) in myMemos">
+                            <td>
+                              <span v-if="memo.toWhom">
+                                {{memo.toWhom }}
+                              </span>
+
+                            </td>
                             <td> {{ memo.natureOfCorrespondence }} </td>
                             <td>
                               <div v-for="corrType in getCorrTypes" >
@@ -88,15 +93,21 @@
 
                               @click="getCorrespondenceDetails(memo.id)"
                               class="btn btn-primary">Details</button></td>
+
+                            <!--<td v-if="getCurrentUserRole === 'Director' || getCurrentUserRole === 'Secretary' || getCurrentUserRole === 'Cashier' ">-->
+                              <!--<el-switch v-model="value1"-->
+                                         <!--@change="valueChange"-->
+                                         <!--active-value="Active"-->
+                                         <!--inactive-value="Inactive">-->
+                              <!--</el-switch>-->
                             <td>
-                              <el-switch v-model="value1"
-                                         active-color="#13ce66"
-                                         inactive-color="#ff4949">
-                              </el-switch>
+                              <button v-if="memo.status === 'Active' " @click="status(memo.id, memo.status)" class="btn btn-success" :disabled="getCurrentUserRole === 'Staff'"> {{ memo.status }}</button>
+                              <button v-else="memo.status === 'Inactive' " @click="status(memo.id, memo.status)" class="btn btn-danger" :disabled="getCurrentUserRole === 'Staff'"> {{ memo.status }}</button>
 
                             </td>
+                            <!--<td v-if="getCurrentUserRole === 'Staff' ">{{ memo.status }}</td>-->
 
-                            <td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>
+                            <td><button  @click.prevent="assignTo(myMemos[index])" class="btn btn-success">Send To</button> </td>
                           </tr>
                           </tbody>
 
@@ -167,7 +178,7 @@
   export default {
     data(){
       return {
-        value1:true
+        value1:""
         //toUSerName: this.$store.getters.assignedCorrUser
 //        showDetailModal: false
       }
@@ -224,11 +235,45 @@
 //        this.$store.dispatch('assignCorrTo', correspondenceId)
         this.$store.dispatch('fetchCorrDetails', correspondenceId)
       },
-      assignTo(correspondenceId){
+      assignTo(correspondence){
+        this.$store.commit('storeSelectedCorr',correspondence)
+       // console.log('selected corr', correspondence)
         $("#showAssignTo").modal("show")
         //console.log(correspondenceId)
-        this.$store.dispatch('assignCorrId', correspondenceId)
+        this.$store.dispatch('assignCorrId', correspondence.id)
+        this.$store.dispatch('getUserAssignedFrom', correspondence.id)
+      },
+      status(correspondenceId, correspondenceStatus){
+        if (correspondenceStatus === "Active"){
+          var corrStatus = "Inactive"
+          console.log("status is active hence make it ", corrStatus)
+        }
+        else {
+          var corrStatus = "Active"
+          console.log("status is Inactive hence make it ", corrStatus)
+        }
+        const formData = {
+          correspondenceId:correspondenceId,
+          status:corrStatus
+        }
+        console.log("status data", formData)
+        this.$store.dispatch('statusChange', formData)
       }
+//      valueChange(val) {
+//        if (val === "Active") {
+//          const switchData = {
+//            switchValue:'Inactive'
+//
+//          }
+//          console.log(switchData)
+//
+//        } else {
+//          const switchData = {
+//            switchValue:'Active'
+//          }
+//          console.log(switchData)
+//        }
+//      }
 
     }
   }

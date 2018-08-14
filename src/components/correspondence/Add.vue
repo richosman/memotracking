@@ -46,8 +46,8 @@
                     <div class="form-group">
                       <label>Nature of Correspondence</label>
                       <select class="form-control" v-model="natureOfCorrespondence">
-                        <option v-for="fetchedCorrNature in fetchedCorrNatures" :value="fetchedCorrNature.natureOfCorrespondence">{{ fetchedCorrNature.natureOfCorrespondence }}</option>
-
+                        <option v-if="getCurrentUserRole === 'Director' " v-for="fetchedCorrNature in fetchedCorrNatures" :value="fetchedCorrNature.natureOfCorrespondence">{{ fetchedCorrNature.natureOfCorrespondence }}</option>
+                        <option v-if="getCurrentUserRole === 'Secretary' " :value="natOfCorrespondence">{{ natOfCorrespondence }} </option>
                       </select>
                     </div>
 
@@ -137,6 +137,7 @@
         dateReceived: '',
         subject: '',
         fromWhere: '',
+        natOfCorrespondence:'Non-Confidential'
         //attachment: []
 
       }
@@ -160,11 +161,15 @@
 
         return this.$store.getters.getAllCorrNatures
 
+      },
+      getCurrentUserRole(){
+        return this.$store.getters.getCurrentUserRole
       }
+
     },
     created() {
       this.$store.dispatch('getAllCorrTypes')
-
+      this.$store.dispatch('getUserRole')
       this.$store.dispatch('getAllCorrNatures')
 
     },
@@ -182,7 +187,8 @@
           subject: this.subject,
           fromWhere: this.fromWhere,
           currentUserAssignedId: localStorage.getItem('userId'),
-          'attachment': attach
+          'attachment': attach,
+          'status':'Active'
         }
         //console.log(' Date data', formData.dateReceived)
         this.$store.dispatch('addCorrespondence', formData)

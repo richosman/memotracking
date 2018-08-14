@@ -28,7 +28,10 @@
                     To Whom Received
                   </td>
                   <td class="comp-detail-body-rd">
-                    {{ displayDetail.toWhom }}
+                    <span v-if="displayDetail.toWhom !==null">
+                      {{ displayDetail.toWhom }}
+                    </span>
+
                   </td>
 
                 </tr>
@@ -69,7 +72,7 @@
                     Date Received
                   </td>
                   <td class="comp-detail-body-rd">
-                    {{ displayDetail.dateReceived }}
+                    {{ displayDetail.dateReceived  | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}
                   </td>
 
                 </tr>
@@ -204,7 +207,7 @@
     computed: {
 
       displayDetail (){
-        console.log('corresponde types', this.$store.getters.fetchedCorrDetails)
+        //console.log('corresponde types', this.$store.getters.fetchedCorrDetails)
         return this.$store.getters.fetchedCorrDetails
       },
       corrTypes(){

@@ -30,7 +30,9 @@ export default new Vuex.Store({
     myAssignedMemos: null,
     //fromName: null,
     assignedLogs: null,
-    currentUserRole: null
+    currentUserRole: null,
+    fromUserEmail:null,
+    selectedCorr:null
 
     //showDetailModal: false
   },
@@ -91,6 +93,12 @@ export default new Vuex.Store({
     },
     storeCurrentUserRole(state, currentUserRole){
       state.currentUserRole = currentUserRole
+    },
+    storeFromUserEmail(state, fromUserEmail){
+      state.fromUserEmail = fromUserEmail
+    },
+    storeSelectedCorr(state, selectedCorr){
+      state.selectedCorr = selectedCorr
     }
 
     // changeShowDetailModal(state){
@@ -144,10 +152,7 @@ export default new Vuex.Store({
           //   title: 'Error',
           //   message: 'Login Failed! Check Details and Try Again'
           // });
-          Notification.error({
-            title: 'Error!',
-            message: `Login Failed! Check Details and Try Again`
-          });
+          swal("Oops!", "Login Failed! Username or password incorrect", "error");
 
           // Notification.error('Login Failed! Check Details and Try Again')
           // router.push('/')
@@ -418,8 +423,8 @@ export default new Vuex.Store({
 
     },
     getMyCorrespondence({commit, state}) {
-      axios.get('/AddMemos?access_token=' + state.tokenId)
-
+      axios.get('/AddMemos?filter={"where":{"status":"Active" }}')
+      //axios.get('/AddMemos?filter={"where":{"natureOfCorrespondence":"Non-Confidential" }}')
         .then(res => {
           var myUserId = state.userId
 
@@ -450,16 +455,18 @@ export default new Vuex.Store({
 
     fetchCorrDetails({commit, state}, correspondenceId) {
 
+      console.log('corrId', correspondenceId)
+
       axios.get('/AddMemos/' + correspondenceId + '?access_token=' + state.tokenId)
         .then(res => {
           const fetchedCorrespondence = res.data
-
+          console.log("corr details are ", fetchedCorrespondence)
           commit('storeFetchedCorrDetails',  fetchedCorrespondence)
 
           setTimeout(
             function(){
               $("#showCorrDetails").modal('show')
-            }, 1000);
+            }, 2000);
         })
         .catch(error =>{
           console.log(error)
@@ -559,6 +566,37 @@ export default new Vuex.Store({
 
         })
     },
+    getUserAssignedFrom({commit, state}, correspondenceId){
+      axios.get('/assignCorrs?access_token=' + state.tokenId)
+        .then(res => {
+
+          //console.log('update assigned correspondence', res.data)
+          var getAllAssignedCorr = res.data
+          var filteredCorr = getAllAssignedCorr.filter(function (AssignedCorr) {
+            return AssignedCorr.correspondenceId === correspondenceId;
+
+          }).filter(function (filteredDate) {
+            return filteredDate.dateAssigned === ''
+          })
+          var fromUserId = filteredCorr[0].fromUserId
+
+          axios.get('/MemoUsers/'+fromUserId+'?access_token=' + state.tokenId)
+            .then(res => {
+              var fromUserEmail = res.data
+              commit('storeFromUserEmail', fromUserEmail)
+              console.log('confidential from User email is ', fromUserEmail)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+
+
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+    },
     assignCorrId({commit, dispatch}, correspondenceId){
       commit('storeAssignCorrId', correspondenceId)
       //console.log('assign corr Id', correspondenceId)
@@ -590,11 +628,11 @@ export default new Vuex.Store({
           //console.log('formdata', formData)
           axios.patch('/assignCorrs/' + filteredCorr[0].id + '?access_token=' + state.tokenId, updateAssignedCorr)
             .then(res => {
-              console.log('before notify')
-              Notification.success({
-                title: 'Success',
-                message: 'Successful'
-              })
+              //console.log('before notify')
+              // Notification.success({
+              //   title: 'Success',
+              //   message: 'Successful'
+              // })
               axios.post('/assignCorrs?access_token=' + state.tokenId, formData)
                 .then(res => {
 
@@ -693,6 +731,19 @@ export default new Vuex.Store({
           console.log(error)
         })
       //console.log('correspondence Id', correspondenceId)
+    },
+    statusChange({dispatch, state}, formData){
+      const corrId = formData.correspondenceId
+      const corrStatus = formData.status
+      //console.log("status is ", formData.status)
+      axios.patch('/AddMemos/' + corrId + '?access_token=' + state.tokenId, {'status': corrStatus})
+        .then(res => {
+          //console.log("Status changed Successfully", res)
+          dispatch('getMyCorrespondence')
+        })
+        .catch(error => {
+          console.log("Status not changed", error)
+        })
     }
   },
 
@@ -745,6 +796,12 @@ export default new Vuex.Store({
     },
     getCurrentUserRole(state){
       return state.currentUserRole
+    },
+    getFromUserEmail(state){
+      return state.fromUserEmail
+    },
+    getSelectedCorr(state){
+      return state.selectedCorr
     }
 
 

@@ -14,8 +14,63 @@
           <form role="form" enctype="multipart/form-data">
 
             <div class="box-body">
+              <div class="form-group"
+                   v-if="userRole != 'Director' && getAssignedCorrDetails.natureOfCorrespondence == 'Confidential'">
+                <label>Assign To</label>
+                <input type="text" id="subject" class="form-control" :value="getFromUserEmail.email" disabled>
+              </div>
 
-              <div class="form-group">
+              <div class="form-group"
+                   v-if="(userRole != 'Director') &&  getAssignedCorrDetails.natureOfCorrespondence == 'Non-Confidential'">
+                <label>Assign To</label>
+                <!--<model-select :options="getAllUserEmails.email"-->
+                <!--v-model="emailSelect"-->
+                <!--placeholder="Select User Email">-->
+                <!--</model-select>-->
+                <!--<el-select class="form-control" filterable v-model="emailSelect">-->
+                <!--<el-option v-for="getAllUserEmail in getAllUserEmails" :value="getAllUserEmail.id"  placeholder="Select User Email">{{ getAllUserEmail.email }}</el-option>-->
+
+                <!--</el-select>-->
+                <el-select
+                  v-model="emailSelect"
+                  filterable
+                  placeholder="Select"
+                >
+                  <el-option
+                    v-for="getAllUserEmail in getAllUserEmails"
+                    :key="getAllUserEmail.id"
+                    :label="getAllUserEmail.email"
+                    :value="getAllUserEmail.id">
+                  </el-option>
+                </el-select>
+              </div>
+
+              <div class="form-group"
+                   v-if="(userRole == 'Director') &&  getAssignedCorrDetails.natureOfCorrespondence == 'Non-Confidential'">
+                <label>Assign To</label>
+                <!--<model-select :options="getAllUserEmails.email"-->
+                <!--v-model="emailSelect"-->
+                <!--placeholder="Select User Email">-->
+                <!--</model-select>-->
+                <!--<el-select class="form-control" filterable v-model="emailSelect">-->
+                <!--<el-option v-for="getAllUserEmail in getAllUserEmails" :value="getAllUserEmail.id"  placeholder="Select User Email">{{ getAllUserEmail.email }}</el-option>-->
+
+                <!--</el-select>-->
+                <el-select
+                  v-model="emailSelect"
+                  filterable
+                  placeholder="Select"
+                >
+                  <el-option
+                    v-for="getAllUserEmail in getAllUserEmails"
+                    :key="getAllUserEmail.id"
+                    :label="getAllUserEmail.email"
+                    :value="getAllUserEmail.id">
+                  </el-option>
+                </el-select>
+              </div>
+
+              <div class="form-group" v-if="userRole == 'Director' && getAssignedCorrDetails.natureOfCorrespondence == 'Confidential' ">
                 <label>Assign To</label>
                 <!--<model-select :options="getAllUserEmails.email"-->
                 <!--v-model="emailSelect"-->
@@ -71,6 +126,7 @@
   export default {
     data() {
       return {
+        userRole: localStorage.getItem('userRole'),
 //        options: [
 //          { value: '1', text: 'osman.alhassan@nca.org.gh' },
 //          { value: '2', text: 'richosmanthus@gmail.com' },
@@ -88,14 +144,20 @@
         //console.log('Users Emails', this.$store.getters.getAllUsers)
         return this.$store.getters.getAllUsers
       },
-//      corrTypes(){
-//        console.log('corr types', this.$store.getters.getAllCorrTypes)
-//        return this.$store.getters.getAllCorrTypes
-//      }
+      getFromUserEmail() {
+        //console.log("user email is ", this.$store.getters.getFromUserEmail)
+        return this.$store.getters.getFromUserEmail
+      },
+      getAssignedCorrDetails() {
+        return this.$store.getters.getSelectedCorr
+      }
+
 
     },
     created() {
+
       this.$store.dispatch('getAllUsers')
+
 
     },
     methods: {
@@ -113,7 +175,7 @@
 
 
         }
-        console.log('something', formData)
+
         this.$store.dispatch('assignCorrTo', formData)
         $("#showAssignTo").modal("hide")
 

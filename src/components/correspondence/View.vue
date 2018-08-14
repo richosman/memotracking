@@ -17,7 +17,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Dashboard
+            Search All Correspondence
 
           </h1>
 
@@ -51,15 +51,22 @@
                             <th>From</th>
                             <th>Date Received</th>
                             <th>Assigned To</th>
+                            <th>Status</th>
                             <th v-if="getCurrentUserRole === 'Director' ">Re-Assign</th>
                             <th>Details</th>
-                            <th>Status</th>
+
                             <!--<th>Assign </th>-->
                           </tr>
                           </thead>
                           <tbody>
                           <tr v-for=" memo in memos" >
-                            <td> {{ memo.toWhom }} </td>
+                            <td>
+                              <span v-if="memo.toWhom">
+                                {{ memo.toWhom }}
+                              </span>
+
+
+                            </td>
                             <td>
                               <div v-for="corrType in getCorrTypes" >
                                 <span v-if="memo.typeOfCorrespondence == corrType.id">
@@ -91,9 +98,10 @@
                               </span>
                               </div>
                             </td>
+                            <td>{{ memo.status }} </td>
 
                           <td v-if="getCurrentUserRole === 'Director' ">
-                            <button  @click="assignTo(memo.id)" class="btn btn-success">Re-Assign</button>
+                              <button  @click="assignTo(memo.id)" class="btn btn-success" :disabled="memo.status === 'Inactive'">Re-Assign</button>
                           </td>
                             <td>
                               <button
@@ -101,7 +109,7 @@
                               @click="getCorrespondenceDetails(memo.id)"
                               class="btn btn-primary">Details</button>
                             </td>
-                            <td><button  class="btn btn-success">Active</button> </td>
+
 
                             <!--<td><button  @click="assignTo(memo.id)" class="btn btn-success">Send To</button> </td>-->
                           </tr>
@@ -116,9 +124,9 @@
                             <th>From</th>
                             <th>Date Received</th>
                             <th>Assigned To</th>
+                            <th>Status</th>
                             <th v-if="getCurrentUserRole === 'Director' ">Re-Assign</th>
                             <th>Details</th>
-                            <th>Status</th>
                             <!--<th>Assign</th>-->
                           </tr>
                           </tfoot>
