@@ -62,14 +62,14 @@
 
                     </select>
                   </div>
-                  <!--<div class="form-group has-feedback">-->
-                  <!--<input type="password" v-model="password" class="form-control" placeholder="Password">-->
-                  <!--<span class="glyphicon glyphicon-lock form-control-feedback"></span>-->
-                  <!--</div>-->
-                  <!--<div class="form-group has-feedback">-->
-                  <!--<input type="password" v-model="confirmPass" class="form-control" placeholder="Retype password">-->
-                  <!--<span class="glyphicon glyphicon-log-in form-control-feedback"></span>-->
-                  <!--</div>-->
+                  <div class="form-group has-feedback">
+                  <input type="password" v-model="password" class="form-control" placeholder="Password">
+                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                  <input type="password" v-model="confirmPass" class="form-control" placeholder="Retype password">
+                  <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                  </div>
                   <div class="row">
                     <div class="col-xs-8">
 
@@ -114,7 +114,10 @@
     data(){
       return {
 
-        userId: this.$route.params.userId
+        userId: this.$route.params.userId,
+         password: '',
+        confirmPass: ''
+       
 
       }
     },
@@ -149,7 +152,9 @@
           username: document.getElementById('username').value,
           email: document.getElementById('email').value,
           division: document.getElementById('division').value,
-          userRole: document.getElementById('userRole').value
+          userRole: document.getElementById('userRole').value,
+          password: this.password,
+          confirmPass: this.confirmPass
 
         }
         console.log('form data is', formData)
@@ -178,4 +183,3 @@
     text-align: center;
   }
 </style>
-

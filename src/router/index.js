@@ -8,6 +8,7 @@ import ViewCorrespondence from '@/components/correspondence/View'
 import AddUser from '@/components/users/Add'
 import ViewUsers from '@/components/users/View'
 import EditUser from '@/components/users/Edit'
+import UserPasswordReset from '@/components/users/PasswordReset'
 import MyCorrespondence from '@/components/correspondence/My-Correspondence'
 import EditCorrespondence from '@/components/correspondence/Edit'
 import AdminHome from '@/components/admin/Admin-Home'
@@ -101,6 +102,11 @@ export default new Router({
       //   }
       // }
 
+    },
+    {
+      path: '/user-password-reset',
+      name: 'UserPasswordReset',
+      component: UserPasswordReset
     },
     {
       path: '/my-correspondence',

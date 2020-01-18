@@ -58,7 +58,7 @@
                                   <th>Role</th>
                                   <th>Edit</th>
                                   <th>Details</th>
-                                  <th>Status</th>
+                                  <th>Change Password</th>
 
                                 </tr>
                                 </thead>
@@ -89,7 +89,13 @@
                                     @click="getUserDetails(user.id)"
                                     class="btn btn-primary">Details</button></td>
 
-                                  <td> </td>
+                                  <td>
+
+                                    <router-link
+                                      tag="button"
+                                      :to="{ name: 'UserPasswordReset', params: { userId: user.id } }"
+                                      class="btn btn-danger">Reset</router-link> 
+                                  </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
@@ -101,7 +107,7 @@
                                   <th>Role</th>
                                   <th>Details</th>
                                   <th>Edit</th>
-                                  <th>Status</th>
+                                  <th>Change Password</th>
                                 </tr>
                                 </tfoot>
                               </table>

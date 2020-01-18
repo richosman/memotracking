@@ -162,6 +162,27 @@ export default new Vuex.Store({
 
 
     },
+    resetUserPassword({commit, state}, resetFormData){
+      const userId = resetFormData.id
+      const password = resetFormData.formData.password
+      const retypePassword = resetFormData.formData.confirmPass
+      console.log('password is',retypePassword)
+      if (password == retypePassword) {
+        axios.put('/MemoUsers/' + userId + '?access_token=' + state.tokenId, password)
+        //axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
+        .then(res => {
+
+          router.push('/view-users')
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      } else {
+        router.push('/user-password-reset')
+      }
+      //axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
+       
+    },
     getUserRole({commit, state}) {
       let currentUserId = localStorage.getItem('userId')
       let token = localStorage.getItem('token')
@@ -485,7 +506,7 @@ export default new Vuex.Store({
     },
     editUserDetailsInfo({commit, state}, editFormData){
       const userId = editFormData.id
-      axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
+      axios.put('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
         .then(res => {
 
           router.push('/view-users')

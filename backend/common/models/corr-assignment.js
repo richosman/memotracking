@@ -15,15 +15,20 @@ module.exports = function(Corrassignment) {
 
     Corrassignment.app.models.Email.send({
 
-      to: 'jmosesessel21@gmail.com',
+
+      to: cb.data.email,
       from: 'jmosesessel21@gmail.com',
       subject: 'test mail',
       text: 'my text',
       html: `Testing mail settings`
     },function (err, mail) {
+      if (err) {
+        console.log('err', err)
+      }
       console.log('email sent!', mail)
-      console.log('err', err)
-      return cb(null)
+      
+      
+      cb(null)
     })
   }
 

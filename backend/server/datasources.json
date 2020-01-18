@@ -36,6 +36,22 @@
       }
     ]
   },
+  "myEmailDataSource": {
+    "connector": "mail",
+    "transports": [{
+      "type": "smtp",
+      "host": "smtp.gmail.com",
+      "secure": false,
+      "port": 587,
+      "tls": {
+        "rejectUnauthorized": false
+      },
+      "auth": {
+        "user": "jmosesessel21@gmail.com",
+        "pass": "0jemo20.@2016"
+      }
+    }]
+  },
   "mailtrap": {
     "name": "mailtrap",
     "connector": "mail",
