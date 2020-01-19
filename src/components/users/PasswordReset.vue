@@ -17,7 +17,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header text-style">
           <h1>
-            Reset User Password
+            Change Your Password
           </h1>
 
         </section>
@@ -37,13 +37,13 @@
                 <form role="form" enctype="multipart/form-data">
                  
                   <div class="form-group has-feedback">
-                  <label>Enter New Password</label>
-                  <input type="password" v-model="password" class="form-control" placeholder="Password">
+                  <label>Enter Old Password</label>
+                  <input type="password" v-model="oldPassword" class="form-control" placeholder="Old Password" required>
                   <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                   </div>
                   <div class="form-group has-feedback">
-                   <label>Retype Password</label>
-                  <input type="password" v-model="confirmPass" class="form-control" placeholder="Retype password">
+                   <label>Enter New Password</label>
+                  <input type="password" v-model="newPassword" class="form-control" placeholder="New password" required>
                   <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                   </div>
                   <div class="row">
@@ -91,8 +91,8 @@
       return {
 
         userId: this.$route.params.userId,
-        password: '',
-        confirmPass: ''
+        oldPassword: '',
+        newPassword: ''
       }
     },
     components:{
@@ -122,13 +122,13 @@
       resetpassword(){
 
         const formData = {
-          password: this.password,
-          confirmPass: this.confirmPass
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword
           //id: this.userId
          
         }
         console.log('form data is', formData)
-        this.$store.dispatch('resetUserPassword',{formData, id: this.userId})
+        this.$store.dispatch('resetUserPassword',{formData})
       }
     }
 

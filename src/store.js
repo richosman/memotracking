@@ -162,24 +162,33 @@ export default new Vuex.Store({
 
 
     },
-    resetUserPassword({commit, state}, resetFormData){
-      const userId = resetFormData.id
-      const password = resetFormData.formData.password
-      const retypePassword = resetFormData.formData.confirmPass
-      console.log('password is',retypePassword)
-      if (password == retypePassword) {
-        axios.put('/MemoUsers/' + userId + '?access_token=' + state.tokenId, password)
-        //axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
+    resetUserPassword({commit, state}, form){
+      
+      // if (password == retypePassword) {
+        axios.post('/MemoUsers/change-password?access_token='+ state.tokenId, {
+          oldPassword: form.formData.oldPassword, 
+          newPassword:form.formData.newPassword
+        })
         .then(res => {
-
-          router.push('/view-users')
+          console.log('password changed data', res.data)
+          if(res.data == '' || res.status == 204 || statusText == 'No Content'){
+            swal("Success", "Password Changed Successfully", "success");
+            router.push('/view-users')
+          }
+          
         })
         .catch(error => {
-          console.log(error)
+          console.log('error',error.response.data.error.message)
+          const errmsg= error.response.data.error.message
+          swal(
+            "Oops! Error Occured", 
+            errmsg , 
+            "error");
+          router.push('/user-password-reset')
         })
-      } else {
-        router.push('/user-password-reset')
-      }
+      // } else {
+      //   router.push('/user-password-reset')
+      // }
       //axios.patch('/MemoUsers/' + userId + '?access_token=' + state.tokenId, editFormData.formData)
        
     },
