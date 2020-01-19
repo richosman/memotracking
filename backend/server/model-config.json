@@ -64,9 +64,13 @@
     "public": true
   },
   "Email": {
-    "dataSource": "Email"
+    "dataSource": "myEmailDataSource"
   },
   "corrNature": {
+    "dataSource": "memotrackingdb",
+    "public": true
+  },
+  "ForgotPassword": {
     "dataSource": "memotrackingdb",
     "public": true
   }

@@ -123,11 +123,8 @@
 
         const formData = {
           oldPassword: this.oldPassword,
-          newPassword: this.newPassword
-          //id: this.userId
-         
+          newPassword: this.newPassword         
         }
-        console.log('form data is', formData)
         this.$store.dispatch('resetUserPassword',{formData})
       }
     }

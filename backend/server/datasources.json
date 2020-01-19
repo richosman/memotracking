@@ -36,21 +36,43 @@
       }
     ]
   },
-  "myEmailDataSource": {
+  "EmailDataSource": {
+    "name": "EmailDataSource",
     "connector": "mail",
-    "transports": [{
-      "type": "smtp",
-      "host": "smtp.gmail.com",
-      "secure": false,
-      "port": 587,
-      "tls": {
-        "rejectUnauthorized": false
-      },
-      "auth": {
-        "user": "jmosesessel21@gmail.com",
-        "pass": "0jemo20.@2016"
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "mail.axishcl.com",
+        "secure": false,
+        "port": 587,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "jmoses@axishcl.com",
+          "pass": "0Jemo20."
+        }
       }
-    }]
+    ]
+  },
+  "myEmailDataSource": {
+    "name": "myEmailDataSource",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "mail.nca.org.gh",
+        "secure": false,
+        "port": 587,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "osman.alhassan@nca.org.gh",
+          "pass": "Admin@17"
+        }
+      }
+    ]
   },
   "mailtrap": {
     "name": "mailtrap",

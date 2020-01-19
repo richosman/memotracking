@@ -11,10 +11,10 @@ module.exports = function(Corrassignment) {
   // });
 
   Corrassignment.sendEmail = function (cb) {
-    console.log('cb',cb)
-
+    // console.log('cb',cb)
+console.log('to mail',cb.data.email)
     Corrassignment.app.models.Email.send({
-
+      
 
       to: cb.data.email,
       from: 'jmosesessel21@gmail.com',
@@ -23,12 +23,16 @@ module.exports = function(Corrassignment) {
       html: `Testing mail settings`
     },function (err, mail) {
       if (err) {
-        console.log('err', err)
+        console.log('err', err.data)
+        return cb(err)
+      }else{
+        console.log('email sent!', mail)
+        return cb(null)
       }
-      console.log('email sent!', mail)
       
       
-      cb(null)
+      
+      // cb(null)
     })
   }
 

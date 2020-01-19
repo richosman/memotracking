@@ -165,9 +165,10 @@ export default new Vuex.Store({
     resetUserPassword({commit, state}, form){
       
       // if (password == retypePassword) {
-        axios.post('/MemoUsers/change-password?access_token='+ state.tokenId, {
+        axios.post('/MemoUsers/change-password?access_token='+ state.tokenId, 
+        {
           oldPassword: form.formData.oldPassword, 
-          newPassword:form.formData.newPassword
+          newPassword: form.formData.newPassword
         })
         .then(res => {
           console.log('password changed data', res.data)
