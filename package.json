@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "alertifyjs": "^1.11.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "element-ui": "^2.4.0",
     "vue": "^2.5.2",
     "vue-moment": "^4.0.0-0",
